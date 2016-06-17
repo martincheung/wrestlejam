@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BJJ Scoreboard</string>
+    <string name="rearmount">Rear mount</string>
+    <string name="mount">Mount</string>
+    <string name="back">Back</string>
+    <string name="guardpass">Guard pass</string>
+    <string name="takedown">Takedown</string>
+    <string name="sweep">Sweep</string>
+    <string name="kneeOnBelly">Knee on belly</string>
+
 </resources>
