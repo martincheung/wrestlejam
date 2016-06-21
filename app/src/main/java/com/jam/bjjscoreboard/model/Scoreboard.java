@@ -60,11 +60,11 @@ public class Scoreboard {
     private Map<Practitioner, Map<ScoreType, Integer>> practitioner_score_map = new HashMap<>();
     private Map<Practitioner, Map<MoveType, List<Long>>> practitioner_timeline_map = new HashMap<>();
 
-    public Scoreboard(){
+    public Scoreboard() {
         setUpPractitionerMaps();
     }
 
-    private void setUpPractitionerMaps(){
+    private void setUpPractitionerMaps() {
         practitioner_score_map.clear();
         practitioner_score_map.put(Practitioner.LEFT, new HashMap<ScoreType, Integer>());
         practitioner_score_map.put(Practitioner.RIGHT, new HashMap<ScoreType, Integer>());
@@ -104,15 +104,16 @@ public class Scoreboard {
         }
     }
 
-    // -------------------------------
-    // Count down timer
-    // -------------------------------
+    private void dispatchOnMoveActionStatusUpdate(final Practitioner practitioner, final MoveType moveType, final boolean success) {
+        if (onScoreboardChangeListener != null) {
+            onScoreboardChangeListener.onMoveActionStatusUpdate(practitioner, moveType, success);
+        }
+    }
 
-    private CountDownTimerWithPause countDownTimer;
 
-    public void startTimer(final long totalMilliSeconds) {
+    public void reset() {
+        stopTimer();
 
-        //Clear everything and dispatch scores of 0
         setUpPractitionerMaps();
 
         dispatchOnScoreUpdate(Practitioner.LEFT, ScoreType.OVERALL, 0, true);
@@ -121,8 +122,18 @@ public class Scoreboard {
         dispatchOnScoreUpdate(Practitioner.RIGHT, ScoreType.ADVANTAGE, 0, true);
         dispatchOnScoreUpdate(Practitioner.LEFT, ScoreType.PENALTY, 0, true);
         dispatchOnScoreUpdate(Practitioner.RIGHT, ScoreType.PENALTY, 0, true);
+    }
 
-        countDownTimer = new CountDownTimerWithPause(totalMilliSeconds, 1000, true) {
+    // -------------------------------
+    // Count down timer
+    // -------------------------------
+
+    private CountDownTimerWithPause countDownTimer;
+
+    public void startTimer(final long totalMilliSeconds) {
+
+        reset();
+        countDownTimer = new CountDownTimerWithPause(totalMilliSeconds, 1, true) {
             @Override
             public void onTick(final long millisUntilFinished) {
                 dispatchOnTick(millisUntilFinished);
@@ -132,13 +143,8 @@ public class Scoreboard {
             public void onFinish() {
                 dispatchOnFinish();
             }
-        };
-        countDownTimer.create();
-    }
+        }.create();
 
-    public void restartTimer(final long totalSeconds) {
-        stopTimer();
-        startTimer(totalSeconds);
     }
 
     public void pauseTimer() {
@@ -205,6 +211,7 @@ public class Scoreboard {
             timeList.remove(timeList.size() - 1);
         } else {
             //trying to cancel a move that doesn't exist in the timeline.  dont allow the score to update
+            dispatchOnMoveActionStatusUpdate(practitioner, moveType, false);
             return;
         }
 
@@ -222,6 +229,7 @@ public class Scoreboard {
         score_map.put(scoreType, currentScore);
 
         dispatchOnScoreUpdate(practitioner, scoreType, currentScore, cancel);
+        dispatchOnMoveActionStatusUpdate(practitioner, moveType, true);
     }
 
     public int getCount(final Practitioner practitioner, final MoveType moveType) {
