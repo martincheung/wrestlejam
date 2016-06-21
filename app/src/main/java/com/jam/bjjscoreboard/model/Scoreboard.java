@@ -19,7 +19,7 @@ public class Scoreboard {
     }
 
     public enum MoveType {
-        GENERIC_4,GENERIC_3,GENERIC_2,REAR_MOUNT, MOUNT, BACK, GUARD_PASS, SWEEP, KNEE_ON_BELLY, TAKE_DOWN, ADVANTAGE, PENALTY
+        GENERIC_4, GENERIC_3, GENERIC_2, REAR_MOUNT, MOUNT, BACK, GUARD_PASS, SWEEP, KNEE_ON_BELLY, TAKE_DOWN, ADVANTAGE, PENALTY
     }
 
     final private static Map<MoveType, Integer> MOVE_TYPE_TO_SCORE_MAP = new HashMap<MoveType, Integer>() {{
@@ -57,8 +57,8 @@ public class Scoreboard {
         LEFT, RIGHT
     }
 
-    final private static Map<Practitioner, Map<ScoreType, Integer>> PRACTITIONER_SCORE_MAP = new HashMap<>();
-    final private static Map<Practitioner, Map<MoveType, List<Long>>> PRACTITIONER_TIMELINE_MAP = new HashMap<>();
+    private Map<Practitioner, Map<ScoreType, Integer>> practitioner_score_map = new HashMap<>();
+    private Map<Practitioner, Map<MoveType, List<Long>>> practitioner_timeline_map = new HashMap<>();
 
 
     // -------------------------------
@@ -72,19 +72,19 @@ public class Scoreboard {
         this.onScoreboardChangeListener = onScoreboardChangeListener;
     }
 
-    public void dispatchOnTick(final long millisUntilFinished) {
+    private void dispatchOnTick(final long millisUntilFinished) {
         if (onScoreboardChangeListener != null) {
             onScoreboardChangeListener.onCountDownTick(millisUntilFinished);
         }
     }
 
-    public void dispatchOnFinish() {
+    private void dispatchOnFinish() {
         if (onScoreboardChangeListener != null) {
             onScoreboardChangeListener.onCountDownFinish();
         }
     }
 
-    public void dispatchOnScoreUpdate(final Practitioner practitioner, final ScoreType scoreType, final int score, final boolean cancel) {
+    private void dispatchOnScoreUpdate(final Practitioner practitioner, final ScoreType scoreType, final int score, final boolean cancel) {
         if (onScoreboardChangeListener != null) {
             onScoreboardChangeListener.onScoreUpdate(practitioner, scoreType, score, cancel);
         }
@@ -99,8 +99,8 @@ public class Scoreboard {
     public void startTimer(final long totalMilliSeconds) {
 
         //Clear everything and dispatch scores of 0
-        PRACTITIONER_SCORE_MAP.clear();
-        PRACTITIONER_TIMELINE_MAP.clear();
+        practitioner_score_map.clear();
+        practitioner_timeline_map.clear();
 
         dispatchOnScoreUpdate(Practitioner.LEFT, ScoreType.OVERALL, 0, true);
         dispatchOnScoreUpdate(Practitioner.RIGHT, ScoreType.OVERALL, 0, true);
@@ -147,17 +147,25 @@ public class Scoreboard {
         countDownTimer = null;
     }
 
+    public long getCountDownTimePassed() {
+
+        if (countDownTimer != null) {
+            countDownTimer.timePassed();
+        }
+        return -1;
+    }
+
     // -------------------------------
     // Score
     // -------------------------------
 
     public int getScore(final Practitioner practitioner, final ScoreType scoreType) {
 
-        if (PRACTITIONER_SCORE_MAP.get(practitioner) == null) {
-            PRACTITIONER_SCORE_MAP.put(practitioner, new HashMap<ScoreType, Integer>());
+        if (practitioner_score_map.get(practitioner) == null) {
+            practitioner_score_map.put(practitioner, new HashMap<ScoreType, Integer>());
         }
 
-        final Map<ScoreType, Integer> score_map = PRACTITIONER_SCORE_MAP.get(practitioner);
+        final Map<ScoreType, Integer> score_map = practitioner_score_map.get(practitioner);
 
         return score_map.get(scoreType) == null ? 0 : score_map.get(scoreType);
 
@@ -168,11 +176,17 @@ public class Scoreboard {
     // -------------------------------
 
     public void moveType_action(final Practitioner practitioner, final MoveType moveType, final boolean cancel) {
-        if (PRACTITIONER_TIMELINE_MAP.get(practitioner) == null) {
-            PRACTITIONER_TIMELINE_MAP.put(practitioner, new HashMap<MoveType, List<Long>>());
+
+        moveType_action(practitioner, moveType, getCountDownTimePassed(), cancel);
+    }
+
+    //For unit testing
+    public void moveType_action(final Practitioner practitioner, final MoveType moveType, final long timePassed, final boolean cancel) {
+        if (practitioner_timeline_map.get(practitioner) == null) {
+            practitioner_timeline_map.put(practitioner, new HashMap<MoveType, List<Long>>());
         }
 
-        final Map<MoveType, List<Long>> timeline_map = PRACTITIONER_TIMELINE_MAP.get(practitioner);
+        final Map<MoveType, List<Long>> timeline_map = practitioner_timeline_map.get(practitioner);
 
         if (timeline_map.get(moveType) == null) {
             timeline_map.put(moveType, new ArrayList<Long>());
@@ -180,7 +194,7 @@ public class Scoreboard {
         final List<Long> timeList = timeline_map.get(moveType);
 
         if (!cancel)
-            timeList.add(countDownTimer != null ? countDownTimer.timePassed() : -1);
+            timeList.add(timePassed);
         else if (timeList.size() > 0) {
             timeList.remove(timeList.size() - 1);
         } else {
@@ -189,11 +203,14 @@ public class Scoreboard {
         }
 
         //adding the score
-        final Map<ScoreType, Integer> score_map = PRACTITIONER_SCORE_MAP.get(practitioner);
+        if (practitioner_score_map.get(practitioner) == null) {
+            practitioner_score_map.put(practitioner, new HashMap<ScoreType, Integer>());
+        }
+        final Map<ScoreType, Integer> score_map = practitioner_score_map.get(practitioner);
         final ScoreType scoreType = MOVE_TYPE_TO_SCORE_TYPE_MAP.get(moveType);
         final int score = MOVE_TYPE_TO_SCORE_MAP.get(moveType);
 
-        int currentScore = score_map.get(scoreType);
+        int currentScore = score_map.get(scoreType) != null ? score_map.get(scoreType) : 0;
 
         final int factor = cancel ? -1 : 1;
         currentScore += score * factor;
@@ -205,11 +222,11 @@ public class Scoreboard {
     }
 
     public int getCount(final Practitioner practitioner, final MoveType moveType) {
-        if (PRACTITIONER_TIMELINE_MAP.get(practitioner) == null) {
-            PRACTITIONER_TIMELINE_MAP.put(practitioner, new HashMap<MoveType, List<Long>>());
+        if (practitioner_timeline_map.get(practitioner) == null) {
+            practitioner_timeline_map.put(practitioner, new HashMap<MoveType, List<Long>>());
         }
 
-        final Map<MoveType, List<Long>> timeline_map = PRACTITIONER_TIMELINE_MAP.get(practitioner);
+        final Map<MoveType, List<Long>> timeline_map = practitioner_timeline_map.get(practitioner);
 
         return timeline_map.get(moveType) == null ? 0 : timeline_map.get(moveType).size();
     }
@@ -219,11 +236,11 @@ public class Scoreboard {
     // -------------------------------
 
     public List<TimeLineItem> getTimeline(final Practitioner practitioner) {
-        if (PRACTITIONER_TIMELINE_MAP.get(practitioner) == null) {
-            PRACTITIONER_TIMELINE_MAP.put(practitioner, new HashMap<MoveType, List<Long>>());
+        if (practitioner_timeline_map.get(practitioner) == null) {
+            practitioner_timeline_map.put(practitioner, new HashMap<MoveType, List<Long>>());
         }
 
-        final Map<MoveType, List<Long>> timeline_map = PRACTITIONER_TIMELINE_MAP.get(practitioner);
+        final Map<MoveType, List<Long>> timeline_map = practitioner_timeline_map.get(practitioner);
 
         final List<TimeLineItem> timeLineList = new ArrayList<>();
 
@@ -245,6 +262,7 @@ public class Scoreboard {
 
         private MoveType moveType;
         private long timeInMilli;
+
         public TimeLineItem(final MoveType moveType, final long timeInMilli) {
             this.moveType = moveType;
             this.timeInMilli = timeInMilli;
