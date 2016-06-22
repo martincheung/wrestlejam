@@ -83,7 +83,6 @@ public abstract class CountDownTimerWithPause {
      */
     public final void cancel() {
         mHandler.removeMessages(MSG);
-        onFinish();
     }
 
     /**

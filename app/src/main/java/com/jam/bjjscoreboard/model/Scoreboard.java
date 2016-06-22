@@ -22,6 +22,10 @@ public class Scoreboard {
         GENERIC_4, GENERIC_3, GENERIC_2, REAR_MOUNT, MOUNT, BACK, GUARD_PASS, SWEEP, KNEE_ON_BELLY, TAKE_DOWN, ADVANTAGE, PENALTY
     }
 
+    public enum WinType {
+        TAP_OUT, POINTS, DQ
+    }
+
     final private static Map<MoveType, Integer> MOVE_TYPE_TO_SCORE_MAP = new HashMap<MoveType, Integer>() {{
         put(MoveType.GENERIC_4, 4);
         put(MoveType.GENERIC_3, 3);
@@ -62,6 +66,7 @@ public class Scoreboard {
 
     public Scoreboard() {
         setUpPractitionerMaps();
+
     }
 
     private void setUpPractitionerMaps() {
@@ -86,15 +91,33 @@ public class Scoreboard {
         this.onScoreboardChangeListener = onScoreboardChangeListener;
     }
 
-    private void dispatchOnTick(final long millisUntilFinished) {
+    private void dispatchOnCountDownTick(final long millisUntilFinished) {
         if (onScoreboardChangeListener != null) {
             onScoreboardChangeListener.onCountDownTick(millisUntilFinished);
         }
     }
 
-    private void dispatchOnFinish() {
+    private void dispatchOnCountDownFinish(final Practitioner winner, final WinType winType) {
         if (onScoreboardChangeListener != null) {
-            onScoreboardChangeListener.onCountDownFinish();
+            onScoreboardChangeListener.onCountDownFinish(winner, winType);
+        }
+    }
+
+    private void dispatchOnCountDownPaused() {
+        if (onScoreboardChangeListener != null) {
+            onScoreboardChangeListener.onCountDownPaused();
+        }
+    }
+
+    private void dispatchOnCountDownResume() {
+        if (onScoreboardChangeListener != null) {
+            onScoreboardChangeListener.onCountDownResume();
+        }
+    }
+
+    private void dispatchOnCountDownStart() {
+        if (onScoreboardChangeListener != null) {
+            onScoreboardChangeListener.onCountDownStart();
         }
     }
 
@@ -112,7 +135,7 @@ public class Scoreboard {
 
 
     public void reset() {
-        stopTimer();
+        stopTimer(null, null);
 
         setUpPractitionerMaps();
 
@@ -136,32 +159,57 @@ public class Scoreboard {
         countDownTimer = new CountDownTimerWithPause(totalMilliSeconds, 1, true) {
             @Override
             public void onTick(final long millisUntilFinished) {
-                dispatchOnTick(millisUntilFinished);
+                dispatchOnCountDownTick(millisUntilFinished);
             }
 
             @Override
             public void onFinish() {
-                dispatchOnFinish();
+
+
+                stopTimer(getWinnerByPoints(), WinType.POINTS);
+
+
             }
         }.create();
 
+        dispatchOnCountDownStart();
+
+    }
+
+    public boolean isTimerPaused() {
+
+        if (countDownTimer != null) {
+            return countDownTimer.isPaused();
+        }
+        return false;
     }
 
     public void pauseTimer() {
         if (countDownTimer != null) {
             countDownTimer.pause();
+            dispatchOnCountDownPaused();
         }
+    }
+
+    public boolean hasCountDownStarted() {
+
+        if (countDownTimer != null) {
+            return countDownTimer.hasBeenStarted();
+        }
+        return false;
     }
 
     public void resumeTimer() {
         if (countDownTimer != null) {
             countDownTimer.resume();
+            dispatchOnCountDownResume();
         }
     }
 
-    public void stopTimer() {
+    public void stopTimer(final Practitioner winner, final WinType winType) {
         if (countDownTimer != null) {
             countDownTimer.cancel();
+            dispatchOnCountDownFinish(winner, winType);
         }
         countDownTimer = null;
     }
@@ -181,11 +229,35 @@ public class Scoreboard {
     public int getScore(final Practitioner practitioner, final ScoreType scoreType) {
 
         final Map<ScoreType, Integer> score_map = practitioner_score_map.get(practitioner);
-
         return score_map.get(scoreType) == null ? 0 : score_map.get(scoreType);
-
     }
 
+    public Practitioner getWinnerByPoints(){
+        final int overall_score_left = getScore(Practitioner.LEFT, ScoreType.OVERALL);
+        final int overall_score_right = getScore(Practitioner.RIGHT, ScoreType.OVERALL);
+
+        final int adv_score_left = getScore(Practitioner.LEFT, ScoreType.ADVANTAGE);
+        final int adv_score_right = getScore(Practitioner.RIGHT, ScoreType.ADVANTAGE);
+
+        final int pen_score_left = getScore(Practitioner.LEFT, ScoreType.PENALTY);
+        final int pen_score_right = getScore(Practitioner.RIGHT, ScoreType.PENALTY);
+
+        if (overall_score_left > overall_score_right) {
+            return Practitioner.LEFT;
+        } else if (overall_score_left < overall_score_right) {
+            return Practitioner.RIGHT;
+        } else if (adv_score_left > adv_score_right) {
+            return Practitioner.LEFT;
+        } else if (adv_score_left < adv_score_right) {
+            return Practitioner.RIGHT;
+        } else if (pen_score_right > pen_score_left) {
+            return Practitioner.LEFT;
+        } else if (pen_score_right < pen_score_left) {
+            return Practitioner.RIGHT;
+        } else {
+            return null;
+        }
+    }
     // -------------------------------
     // Move type
     // -------------------------------

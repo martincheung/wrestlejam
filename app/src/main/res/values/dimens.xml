@@ -24,4 +24,6 @@
 
     <dimen name="adv_pen_score_text_size">20sp</dimen>
     <dimen name="adv_pen_text_size">15sp</dimen>
+
+    <dimen name="timer_text_size">25sp</dimen>
 </resources>

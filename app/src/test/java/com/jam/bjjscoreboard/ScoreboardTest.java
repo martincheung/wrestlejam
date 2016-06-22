@@ -54,6 +54,33 @@ public class ScoreboardTest {
         scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.REAR_MOUNT, true);
         assertEquals(scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.OVERALL), 11);
     }
+    @Test
+    public void testWinnerByPoints() throws Exception {
+        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, false);
+        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, false);
+        assertEquals(scoreboard.getWinnerByPoints(), Scoreboard.Practitioner.LEFT);
+
+        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, false);
+        assertEquals(scoreboard.getWinnerByPoints(), Scoreboard.Practitioner.LEFT);
+
+
+        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GUARD_PASS, false);
+        assertEquals(scoreboard.getWinnerByPoints(), Scoreboard.Practitioner.RIGHT);
+
+        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.KNEE_ON_BELLY, false);
+        assertEquals(scoreboard.getWinnerByPoints(), null);
+
+
+        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.ADVANTAGE, false);
+        assertEquals(scoreboard.getWinnerByPoints(), Scoreboard.Practitioner.LEFT);
+
+        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.ADVANTAGE, false);
+        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.PENALTY, false);
+        assertEquals(scoreboard.getWinnerByPoints(), Scoreboard.Practitioner.LEFT);
+        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.PENALTY, false);
+        assertEquals(scoreboard.getWinnerByPoints(),null);
+
+    }
 
 
     @Test

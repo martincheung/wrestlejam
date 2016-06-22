@@ -11,4 +11,11 @@
     <string name="adv">ADV</string>
     <string name="pen">PEN</string>
 
+    <string name="combate">Combate!</string>
+    <string name="tap">Tap!</string>
+    <string name="reset">Reset</string>
+
+    <string name="defaultLeftPlayerName">Royler Gracie</string>
+    <string name="defaultRightPlayerName">Eddie Bravo</string>
+
 </resources>

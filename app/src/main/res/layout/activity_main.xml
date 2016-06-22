@@ -22,22 +22,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:background="@color/score4"
+                android:gravity="center"
                 android:orientation="horizontal">
 
 
                 <TextView
-                    android:id="@+id/rearmount_add_left"
+                    android:id="@+id/rearMount_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
@@ -46,22 +46,22 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/rearmount"
-                    android:textSize="@dimen/advance_move_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/advance_move_text_size" />
 
 
                 <TextView
-                    android:id="@+id/rearmount_subtract_left"
+                    android:id="@+id/rearMount_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -73,22 +73,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score4"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score4">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/mount_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -103,14 +103,14 @@
                     android:id="@+id/mount_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -122,22 +122,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score4"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score4">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/back_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -152,14 +152,14 @@
                     android:id="@+id/back_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -171,22 +171,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score3"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score3">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/guardPass_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -201,14 +201,14 @@
                     android:id="@+id/guardPass_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -220,22 +220,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score2"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/takeDown_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -250,14 +250,14 @@
                     android:id="@+id/takeDown_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -269,22 +269,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score2"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/sweep_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -299,14 +299,14 @@
                     android:id="@+id/sweep_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
 
@@ -319,22 +319,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score2"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/kneeOnBelly_add_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -349,14 +349,14 @@
                     android:id="@+id/kneeOnBelly_subtract_left"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
         </LinearLayout>
 
@@ -382,8 +382,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:text="Royler Gracie"
+                    android:maxLines="1"
+                    android:text="@string/defaultLeftPlayerName"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
@@ -402,9 +404,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
+                android:paddingBottom="@dimen/timer_tap_button_height"
                 android:paddingLeft="@dimen/bottom_display_group_horizontal_padding"
                 android:paddingRight="@dimen/bottom_display_group_horizontal_padding"
-                android:paddingBottom="@dimen/timer_tap_button_height"
                 android:paddingTop="@dimen/bottom_display_group_top_padding">
 
                 <LinearLayout
@@ -490,9 +492,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:textSize="@dimen/adv_pen_score_text_size"
                             android:text="0"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="@dimen/adv_pen_score_text_size" />
 
                         <TextView
                             android:id="@+id/pen_subtract_left"
@@ -538,8 +540,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:text="Eddie Bravo"
+                    android:maxLines="1"
+                    android:text="@string/defaultRightPlayerName"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
@@ -558,9 +562,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
+                android:paddingBottom="@dimen/timer_tap_button_height"
                 android:paddingLeft="@dimen/bottom_display_group_horizontal_padding"
                 android:paddingRight="@dimen/bottom_display_group_horizontal_padding"
-                android:paddingBottom="@dimen/timer_tap_button_height"
                 android:paddingTop="@dimen/bottom_display_group_top_padding">
 
                 <LinearLayout
@@ -646,9 +650,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:textSize="@dimen/adv_pen_score_text_size"
                             android:text="0"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="@dimen/adv_pen_score_text_size" />
 
                         <TextView
                             android:id="@+id/pen_add_right"
@@ -684,22 +688,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score4"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score4">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/rearmount_subtract_right"
+                    android:id="@+id/rearMount_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -711,17 +715,17 @@
                     android:textSize="@dimen/advance_move_text_size" />
 
                 <TextView
-                    android:id="@+id/rearmount_add_right"
+                    android:id="@+id/rearMount_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -733,22 +737,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score4"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score4">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/mount_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -763,14 +767,14 @@
                     android:id="@+id/mount_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -782,22 +786,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score4"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score4">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/back_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -812,14 +816,14 @@
                     android:id="@+id/back_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
 
@@ -832,22 +836,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score3"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score3">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/guardPass_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -862,14 +866,14 @@
                     android:id="@+id/guardPass_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
 
@@ -882,22 +886,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score2"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/takeDown_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -913,14 +917,14 @@
                     android:id="@+id/takeDown_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -932,23 +936,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score2"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/sweep_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textIsSelectable="false" />
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -963,15 +967,15 @@
                     android:id="@+id/sweep_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textIsSelectable="false" />
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
 
             <View
@@ -983,23 +987,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="@color/score2"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@color/score2">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/kneeOnBelly_subtract_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="-"
-                    android:textSize="@dimen/add_subtract_button_text_size"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textIsSelectable="false" />
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -1014,24 +1018,24 @@
                     android:id="@+id/kneeOnBelly_add_right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginBottom="@dimen/add_subtract_button_vertical_margin"
                     android:layout_marginTop="@dimen/add_subtract_button_vertical_margin"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/add_subtract_button_horizontal_padding"
                     android:paddingRight="@dimen/add_subtract_button_horizontal_padding"
                     android:text="+"
-                    android:textSize="@dimen/add_subtract_button_text_size"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textIsSelectable="false" />
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/add_subtract_button_text_size" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/tap_button_bottom_padding">
 
         <Button
@@ -1043,7 +1047,7 @@
             android:layout_alignParentStart="false"
             android:layout_alignWithParentIfMissing="false"
             android:layout_centerInParent="true"
-            android:text="Combate!" />
+            android:text="@string/combate" />
     </LinearLayout>
 
     <Button
@@ -1052,5 +1056,6 @@
         android:layout_height="@dimen/timer_tap_button_height"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="5:00" />
+        android:text="6:66"
+        android:textSize="@dimen/timer_text_size" />
 </RelativeLayout>
