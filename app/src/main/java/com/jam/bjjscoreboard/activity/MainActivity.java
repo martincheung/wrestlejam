@@ -1,10 +1,11 @@
 package com.jam.bjjscoreboard.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -127,12 +128,14 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     public final static String LEFT_PLAYER_NAME_PREFERENCE_KEY = "leftPlayerNamePreference";
     public final static String RIGHT_PLAYER_NAME_PREFERENCE_KEY = "rightPlayerNamePreference";
 
+    private Vibrator vibrator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Left player IDs
@@ -299,8 +302,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 } else {//RIGHT
 
                 }
-            }
-            else if (winType == Scoreboard.WinType.DQ) {
+            } else if (winType == Scoreboard.WinType.DQ) {
                 if (winner == Scoreboard.Practitioner.LEFT) {
 
                 } else {//RIGHT
@@ -351,9 +353,9 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     }
 
     @Override
-    public void onMoveActionStatusUpdate(Scoreboard.Practitioner
-                                                 practitioner, Scoreboard.MoveType moveType, boolean success) {
-
+    public void onMoveActionStatusUpdate(Scoreboard.Practitioner practitioner, Scoreboard.MoveType moveType, boolean success) {
+        if (success)
+            vibrator.vibrate(50);
     }
 
     @Override
@@ -367,17 +369,14 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 scoreboard.resumeTimer();
             else
                 scoreboard.pauseTimer();
-        }
-        if (v.getId() == R.id.tap) {
+        } else if (v.getId() == R.id.tap) {
             if (!scoreboard.hasCountDownStarted())
                 scoreboard.startTimer(sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI));
             else if (scoreboard.isTimerPaused())
                 scoreboard.reset();
             else
                 scoreboard.stopTimer(Scoreboard.Practitioner.LEFT, Scoreboard.WinType.TAP_OUT);
-        }
-
-        if (!scoreboard.isTimerPaused()) {
+        } else if (!scoreboard.isTimerPaused()) {
             //Move actions
             switch (v.getId()) {
                 case R.id.rearMount_add_left:
