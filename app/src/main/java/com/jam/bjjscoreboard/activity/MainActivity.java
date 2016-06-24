@@ -1,5 +1,7 @@
 package com.jam.bjjscoreboard.activity;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -64,6 +67,16 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     private TextView leftPlayerName;
 
+    //Groupings
+
+    private ViewGroup rearMount_group_left;
+    private ViewGroup mount_group_left;
+    private ViewGroup back_group_left;
+    private ViewGroup guardPass_group_left;
+    private ViewGroup takeDown_group_left;
+    private ViewGroup sweep_group_left;
+    private ViewGroup kneeOnBelly_group_left;
+
     // ------------------
     // Right player IDs
     // ------------------
@@ -107,6 +120,16 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     private TextView rightPlayerName;
 
+    //Groupings
+
+    private ViewGroup rearMount_group_right;
+    private ViewGroup mount_group_right;
+    private ViewGroup back_group_right;
+    private ViewGroup guardPass_group_right;
+    private ViewGroup takeDown_group_right;
+    private ViewGroup sweep_group_right;
+    private ViewGroup kneeOnBelly_group_right;
+
     // ------------------
     // Center buttons
     // ------------------
@@ -128,6 +151,9 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     public final static String LEFT_PLAYER_NAME_PREFERENCE_KEY = "leftPlayerNamePreference";
     public final static String RIGHT_PLAYER_NAME_PREFERENCE_KEY = "rightPlayerNamePreference";
 
+    public final static int VIBRATION_LENGTH_IN_MILLI = 50;
+    public final static int TEXT_HIGHLIGHT_DURATION_IN_MILLI = 500;
+
     private Vibrator vibrator;
 
     @Override
@@ -143,36 +169,43 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         rearMount_add_left.setOnClickListener(this);
         rearMount_subtract_left = findViewById(R.id.rearMount_subtract_left);
         rearMount_subtract_left.setOnClickListener(this);
+        rearMount_group_left = (ViewGroup) findViewById(R.id.rearMount_group_left);
 
         mount_add_left = findViewById(R.id.mount_add_left);
         mount_add_left.setOnClickListener(this);
         mount_subtract_left = findViewById(R.id.mount_subtract_left);
         mount_subtract_left.setOnClickListener(this);
+        mount_group_left = (ViewGroup) findViewById(R.id.mount_group_left);
 
         back_add_left = findViewById(R.id.back_add_left);
         back_add_left.setOnClickListener(this);
         back_subtract_left = findViewById(R.id.back_subtract_left);
         back_subtract_left.setOnClickListener(this);
+        back_group_left = (ViewGroup) findViewById(R.id.back_group_left);
 
         guardPass_add_left = findViewById(R.id.guardPass_add_left);
         guardPass_add_left.setOnClickListener(this);
         guardPass_subtract_left = findViewById(R.id.guardPass_subtract_left);
         guardPass_subtract_left.setOnClickListener(this);
+        guardPass_group_left = (ViewGroup) findViewById(R.id.guardPass_group_left);
 
         takeDown_add_left = findViewById(R.id.takeDown_add_left);
         takeDown_add_left.setOnClickListener(this);
         takeDown_subtract_left = findViewById(R.id.takeDown_subtract_left);
         takeDown_subtract_left.setOnClickListener(this);
+        takeDown_group_left = (ViewGroup) findViewById(R.id.takeDown_group_left);
 
         sweep_add_left = findViewById(R.id.sweep_add_left);
         sweep_add_left.setOnClickListener(this);
         sweep_subtract_left = findViewById(R.id.sweep_subtract_left);
         sweep_subtract_left.setOnClickListener(this);
+        sweep_group_left = (ViewGroup) findViewById(R.id.sweep_group_left);
 
         kneeOnBelly_add_left = findViewById(R.id.kneeOnBelly_add_left);
         kneeOnBelly_add_left.setOnClickListener(this);
         kneeOnBelly_subtract_left = findViewById(R.id.kneeOnBelly_subtract_left);
         kneeOnBelly_subtract_left.setOnClickListener(this);
+        kneeOnBelly_group_left = (ViewGroup) findViewById(R.id.kneeOnBelly_group_left);
 
         adv_add_left = findViewById(R.id.adv_add_left);
         adv_add_left.setOnClickListener(this);
@@ -197,36 +230,43 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         rearMount_add_right.setOnClickListener(this);
         rearMount_subtract_right = findViewById(R.id.rearMount_subtract_right);
         rearMount_subtract_right.setOnClickListener(this);
+        rearMount_group_right = (ViewGroup) findViewById(R.id.rearMount_group_right);
 
         mount_add_right = findViewById(R.id.mount_add_right);
         mount_add_right.setOnClickListener(this);
         mount_subtract_right = findViewById(R.id.mount_subtract_right);
         mount_subtract_right.setOnClickListener(this);
+        mount_group_right = (ViewGroup) findViewById(R.id.mount_group_right);
 
         back_add_right = findViewById(R.id.back_add_right);
         back_add_right.setOnClickListener(this);
         back_subtract_right = findViewById(R.id.back_subtract_right);
         back_subtract_right.setOnClickListener(this);
+        back_group_right = (ViewGroup) findViewById(R.id.back_group_right);
 
         guardPass_add_right = findViewById(R.id.guardPass_add_right);
         guardPass_add_right.setOnClickListener(this);
         guardPass_subtract_right = findViewById(R.id.guardPass_subtract_right);
         guardPass_subtract_right.setOnClickListener(this);
+        guardPass_group_right = (ViewGroup) findViewById(R.id.guardPass_group_right);
 
         takeDown_add_right = findViewById(R.id.takeDown_add_right);
         takeDown_add_right.setOnClickListener(this);
         takeDown_subtract_right = findViewById(R.id.takeDown_subtract_right);
         takeDown_subtract_right.setOnClickListener(this);
+        takeDown_group_right = (ViewGroup) findViewById(R.id.takeDown_group_right);
 
         sweep_add_right = findViewById(R.id.sweep_add_right);
         sweep_add_right.setOnClickListener(this);
         sweep_subtract_right = findViewById(R.id.sweep_subtract_right);
         sweep_subtract_right.setOnClickListener(this);
+        sweep_group_right = (ViewGroup) findViewById(R.id.sweep_group_right);
 
         kneeOnBelly_add_right = findViewById(R.id.kneeOnBelly_add_right);
         kneeOnBelly_add_right.setOnClickListener(this);
         kneeOnBelly_subtract_right = findViewById(R.id.kneeOnBelly_subtract_right);
         kneeOnBelly_subtract_right.setOnClickListener(this);
+        kneeOnBelly_group_right = (ViewGroup) findViewById(R.id.kneeOnBelly_group_right);
 
         adv_add_right = findViewById(R.id.adv_add_right);
         adv_add_right.setOnClickListener(this);
@@ -353,9 +393,88 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     }
 
     @Override
-    public void onMoveActionStatusUpdate(Scoreboard.Practitioner practitioner, Scoreboard.MoveType moveType, boolean success) {
-        if (success)
-            vibrator.vibrate(50);
+    public void onMoveActionStatusUpdate(final Scoreboard.Practitioner practitioner, final Scoreboard.MoveType moveType, boolean success) {
+        if (success) {
+            vibrator.vibrate(VIBRATION_LENGTH_IN_MILLI);
+
+            final int textHighlight_color = getResources().getColor(R.color.textHighlight);
+            final int destination_color;
+            switch (moveType) {
+                case REAR_MOUNT:
+                case MOUNT:
+                case BACK:
+                    destination_color = getResources().getColor(R.color.score4);
+                    break;
+                case GUARD_PASS:
+                    destination_color = getResources().getColor(R.color.score3);
+                    break;
+                default:
+                    destination_color = getResources().getColor(R.color.score2);
+                    break;
+            }
+            final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), textHighlight_color, destination_color);
+            colorAnimation.setDuration(TEXT_HIGHLIGHT_DURATION_IN_MILLI);
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(final ValueAnimator animator) {
+                    switch (practitioner) {
+                        case LEFT:
+                            switch (moveType) {
+                                case REAR_MOUNT:
+                                    rearMount_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case MOUNT:
+                                    mount_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case BACK:
+                                    back_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case GUARD_PASS:
+                                    guardPass_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case TAKE_DOWN:
+                                    takeDown_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case SWEEP:
+                                    sweep_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case KNEE_ON_BELLY:
+                                    kneeOnBelly_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                            }
+                            break;
+                        case RIGHT:
+                            switch (moveType) {
+                                case REAR_MOUNT:
+                                    rearMount_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case MOUNT:
+                                    mount_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case BACK:
+                                    back_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case GUARD_PASS:
+                                    guardPass_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case TAKE_DOWN:
+                                    takeDown_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case SWEEP:
+                                    sweep_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case KNEE_ON_BELLY:
+                                    kneeOnBelly_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                            }
+                            break;
+                    }
+                }
+
+            });
+            colorAnimation.start();
+        }
     }
 
     @Override

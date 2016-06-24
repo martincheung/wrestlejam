@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BJJ Scoreboard</string>
-    <string name="rearmount">Rear mount</string>
+    <string name="rearMount">Rear mount</string>
     <string name="mount">Mount</string>
     <string name="back">Back</string>
     <string name="guardpass">Guard pass</string>

@@ -7,4 +7,7 @@
     <color name="score4">#1A1A1A</color>
     <color name="score3">#333333</color>
     <color name="score2">#808080</color>
+    <color name="defaultText">#FFFFFF</color>
+    <color name="textHighlight">#00C600</color>
+
 </resources>
