@@ -3,14 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="advance_move_text_size">13sp</dimen>
+    <dimen name="advance_move_text_size">20sp</dimen>
     <dimen name="add_subtract_button_vertical_margin">7dp</dimen>
     <dimen name="add_subtract_button_horizontal_padding">15dp</dimen>
-    <dimen name="add_subtract_button_text_size">20dp</dimen>
+    <dimen name="add_subtract_button_text_size">30dp</dimen>
 
-    <dimen name="timer_tap_button_width">100dp</dimen>
-    <dimen name="timer_tap_button_height">50dp</dimen>
-    <dimen name="tap_button_bottom_padding">30dp</dimen>
+    <dimen name="timer_tap_button_width">120dp</dimen>
+    <dimen name="timer_tap_button_height">60dp</dimen>
+    <dimen name="tap_button_bottom_padding">50dp</dimen>
 
     <dimen name="top_display_group_top_padding">20dp</dimen>
     <!-- This should be half of "timer_tap_button_height" plus half of "tap_button_bottom_padding"-->
@@ -20,12 +20,12 @@
     <!-- This should be half of "timer_tap_button_height"-->
     <dimen name="bottom_display_group_top_padding">25dp</dimen>
 
-    <dimen name="overall_score_text_size">60sp</dimen>
+    <dimen name="overall_score_text_size">80sp</dimen>
 
-    <dimen name="adv_pen_score_text_size">20sp</dimen>
-    <dimen name="adv_pen_text_size">15sp</dimen>
+    <dimen name="adv_pen_score_text_size">30sp</dimen>
+    <dimen name="adv_pen_text_size">20sp</dimen>
 
-    <dimen name="timer_text_size">25sp</dimen>
-    <dimen name="player_text_size">20sp</dimen>
-    <dimen name="combate_button_size">15sp</dimen>
+    <dimen name="timer_text_size">30sp</dimen>
+    <dimen name="player_text_size">30sp</dimen>
+    <dimen name="combate_button_size">25sp</dimen>
 </resources>
