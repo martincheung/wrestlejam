@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.jam.bjjscoreboard.R;
 import com.jam.bjjscoreboard.eventListener.OnScoreboardChangeListener;
 import com.jam.bjjscoreboard.model.Scoreboard;
@@ -21,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity implements OnScoreboardChangeListener, View.OnClickListener {
 
+
+    //InterstitialAd
+    InterstitialAd mInterstitialAd;
 
     private Scoreboard scoreboard;
 
@@ -300,6 +306,30 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         scoreboard.setOnScoreboardChangeListener(this);
 
         resetState();
+
+        // Intersistal Ad setup
+        mInterstitialAd = new InterstitialAd(this);
+
+        //Replace this with real ID from Ad Mob
+        //This is the Test Ad - use it for testing: ca-app-pub-3940256099942544/1033173712
+        // This is the real one, use it for prod: ca-app-pub-3985981761358091/5836770966
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+            }
+        });
+
+        requestNewInterstitial();
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .build();
+        mInterstitialAd.loadAd(adRequest);
     }
 
 
@@ -367,6 +397,13 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     public void onCountDownStart() {
 
         tap.setText(getString(R.string.tap));
+
+        //This is where the ad comes up. The ad only comes up if it is loaded
+        //If it is not loaded, we can do an else to go through with whatever other action
+
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
     }
 
     @Override
