@@ -18,4 +18,13 @@
     <string name="defaultLeftPlayerName">Royler Gracie</string>
     <string name="defaultRightPlayerName">Eddie Bravo</string>
 
+    <string name="menuTitle">Menu</string>
+
+
+    <string name="players">Players</string>
+    <string name="feedBack">Feedback</string>
+    <string name="vibrateOnScoreChange">Vibrate on score change</string>
+    <string name="buzzer">Buzzer on match end</string>
+    <string name="matchLength">Match length</string>
+
 </resources>

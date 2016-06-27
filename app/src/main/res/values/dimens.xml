@@ -26,4 +26,10 @@
     <dimen name="adv_pen_text_size">15sp</dimen>
 
     <dimen name="timer_text_size">25sp</dimen>
+
+
+    <dimen name="header_top_padding">10dp</dimen>
+
+    <dimen name="list_item_horizontal_margin">8dp</dimen>
+    <dimen name="list_item_vertical_margin">8dp</dimen>
 </resources>

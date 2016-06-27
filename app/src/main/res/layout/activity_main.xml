@@ -1072,4 +1072,11 @@
         android:layout_centerHorizontal="true"
         android:text="6:66"
         android:textSize="@dimen/timer_text_size" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/top_display_group_top_padding"
+        android:id="@+id/menu_button"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/menu_button" />
 </RelativeLayout>

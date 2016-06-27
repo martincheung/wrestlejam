@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF0001</color>
 
     <color name="score4">#1A1A1A</color>
     <color name="score3">#333333</color>
@@ -10,4 +10,15 @@
     <color name="defaultText">#FFFFFF</color>
     <color name="textHighlight">#00C600</color>
 
+
+
+    <array name="playerColors">
+        <item>@android:color/holo_red_dark</item>
+        <item>@android:color/holo_blue_dark</item>
+        <item>@android:color/holo_green_dark</item>
+        <item>@android:color/holo_orange_dark</item>
+        <item>@android:color/holo_purple</item>
+        <item>@android:color/black</item>
+        <item>@android:color/darker_gray</item>
+    </array>
 </resources>

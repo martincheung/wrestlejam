@@ -3,20 +3,31 @@ package com.jam.bjjscoreboard.activity;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jam.bjjscoreboard.R;
 import com.jam.bjjscoreboard.eventListener.OnScoreboardChangeListener;
 import com.jam.bjjscoreboard.model.Scoreboard;
+import com.jam.bjjscoreboard.widget.NumberPicker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity implements OnScoreboardChangeListener, View.OnClickListener {
@@ -77,6 +88,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     private ViewGroup sweep_group_left;
     private ViewGroup kneeOnBelly_group_left;
 
+    private ViewGroup leftPlayerDisplay;
     // ------------------
     // Right player IDs
     // ------------------
@@ -130,12 +142,15 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     private ViewGroup sweep_group_right;
     private ViewGroup kneeOnBelly_group_right;
 
+    private ViewGroup rightPlayerDisplay;
+
     // ------------------
     // Center buttons
     // ------------------
 
     private Button tap;
     private Button timer;
+    private View menu_button;
 
     // -------------------
     // Other stuff
@@ -143,18 +158,28 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     private SharedPreferences sharedPreferences;
 
-    // timer values
+    // timer
     public final static long DEFAULT_MATCH_LENGTH_IN_MILLI = 300000; //5 minutes
     public final static String MATCH_LENGTH_PREFERENCE_KEY = "matchLengthPreference";
 
-    // name values
+    // name
     public final static String LEFT_PLAYER_NAME_PREFERENCE_KEY = "leftPlayerNamePreference";
     public final static String RIGHT_PLAYER_NAME_PREFERENCE_KEY = "rightPlayerNamePreference";
 
+    // feedback
+    private Vibrator vibrator;
     public final static int VIBRATION_LENGTH_IN_MILLI = 50;
+    public final static String VIBRATION_PREFERENCE_KEY = "vibrationPreference";
+
     public final static int TEXT_HIGHLIGHT_DURATION_IN_MILLI = 500;
 
-    private Vibrator vibrator;
+    public final static String BUZZER_PREFERENCE_KEY = "buzzerPreference";
+
+    // color
+    private PlayerColorAdapter playerColorAdapter;
+
+    public final static String LEFT_PLAYER_COLOR_PREFERENCE_KEY = "leftPlayerColorPreference";
+    public final static String RIGHT_PLAYER_COLOR_PREFERENCE_KEY = "rightPlayerColorPreference";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +250,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         leftPlayerName.setOnClickListener(this);
         leftPlayerName.setText(sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultLeftPlayerName)));
 
+        leftPlayerDisplay = (ViewGroup) findViewById(R.id.leftPlayerDisplay);
+
         // Right player IDs
         rearMount_add_right = findViewById(R.id.rearMount_add_right);
         rearMount_add_right.setOnClickListener(this);
@@ -286,12 +313,16 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         rightPlayerName.setOnClickListener(this);
         rightPlayerName.setText(sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultRightPlayerName)));
 
+        rightPlayerDisplay = (ViewGroup) findViewById(R.id.rightPlayerDisplay);
+
         //Buttons
 
         tap = (Button) findViewById(R.id.tap);
         tap.setOnClickListener(this);
         timer = (Button) findViewById(R.id.timer);
         timer.setOnClickListener(this);
+        menu_button = findViewById(R.id.menu_button);
+        menu_button.setOnClickListener(this);
 
 
         // Score board
@@ -299,22 +330,47 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         scoreboard = new Scoreboard();
         scoreboard.setOnScoreboardChangeListener(this);
 
+        //Color
+
+        final int[] colors_arr = getResources().getIntArray(R.array.playerColors);
+        List<Integer> colorList = new ArrayList<Integer>();
+        for (int index = 0; index < colors_arr.length; index++) {
+            colorList.add(colors_arr[index]);
+        }
+        playerColorAdapter = new PlayerColorAdapter(this, R.layout.layout_jam_spinner_item, colorList);
+
         resetState();
     }
 
 
     private void resetState() {
-        if (timer != null && tap != null) {
+        if (timer != null) {
             timer.setText(milliToTimeFormat(sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI)));
+        }
+        if (tap != null) {
             tap.setText(getString(R.string.combate));
+        }
+        if (menu_button != null) {
+            menu_button.setAlpha(1.0f);
+        }
+        if (leftPlayerDisplay != null) {
+            leftPlayerDisplay.setBackgroundColor(sharedPreferences.getInt(LEFT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_blue_dark)));
+        }
+        if (rightPlayerDisplay != null) {
+            rightPlayerDisplay.setBackgroundColor(sharedPreferences.getInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_red_dark)));
         }
     }
 
     private static String milliToTimeFormat(final long milli) {
-        return String.format("%d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(milli),
-                TimeUnit.MILLISECONDS.toSeconds(milli) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli)));
+        return String.format("%d:%02d", toMinutes(milli), toSeconds(milli));
+    }
+
+    private static long toMinutes(final long milli) {
+        return TimeUnit.MILLISECONDS.toMinutes(milli);
+    }
+
+    private static long toSeconds(final long milli) {
+        return TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     }
 
     @Override
@@ -359,7 +415,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownResume() {
-        tap.setText(getString(R.string.tap));
+        onCountDownStart();
 
     }
 
@@ -367,6 +423,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     public void onCountDownStart() {
 
         tap.setText(getString(R.string.tap));
+        menu_button.setAlpha(0.5f);
     }
 
     @Override
@@ -395,7 +452,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     @Override
     public void onMoveActionStatusUpdate(final Scoreboard.Practitioner practitioner, final Scoreboard.MoveType moveType, boolean success) {
         if (success) {
-            vibrator.vibrate(VIBRATION_LENGTH_IN_MILLI);
+            if (sharedPreferences.getBoolean(VIBRATION_PREFERENCE_KEY, true))
+                vibrator.vibrate(VIBRATION_LENGTH_IN_MILLI);
 
             final int textHighlight_color = getResources().getColor(R.color.textHighlight);
             final int destination_color;
@@ -495,6 +553,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 scoreboard.reset();
             else
                 scoreboard.stopTimer(Scoreboard.Practitioner.LEFT, Scoreboard.WinType.TAP_OUT);
+        } else if (v.getId() == R.id.menu_button) {
+            openMenu();
         } else if (!scoreboard.isTimerPaused()) {
             //Move actions
             switch (v.getId()) {
@@ -610,4 +670,128 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
             }
         }
     }
+
+    // --------------------
+    // Menu
+    // --------------------
+
+
+    private void openMenu() {
+        if (scoreboard.hasCountDownStarted()) {
+
+            return;
+        }
+        final View layout_menu_options = LayoutInflater.from(this).inflate(R.layout.layout_menu_options, (ScrollView) findViewById(R.id.layout_menu_options_rootLayout));
+
+        final int minutes = (int) toMinutes(sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI));
+        final int seconds = (int) toSeconds(sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI));
+
+        final NumberPicker minutes_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.minutes_numberPicker);
+        minutes_numberPicker.setValue(minutes);
+        final NumberPicker seconds_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.seconds_numberPicker);
+        seconds_numberPicker.setValue(seconds);
+
+
+        for (int i = 0; i < 2; i++) {
+
+            final boolean isLeft = i == 0;
+
+            final Spinner playerColor_spinner = (Spinner) (isLeft ? layout_menu_options.findViewById(R.id.playerColorLeft_spinner) : layout_menu_options.findViewById(R.id.playerColorRight_spinner));
+            playerColor_spinner.setAdapter(playerColorAdapter);
+            playerColor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            final int leftPlayerColor = sharedPreferences.getInt(LEFT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_blue_dark));
+            final int rightPlayerColor = sharedPreferences.getInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_red_dark));
+
+            int spinnerPosition = playerColorAdapter.getPosition(isLeft ? leftPlayerColor : rightPlayerColor);
+            playerColor_spinner.setSelection(spinnerPosition, false);
+
+        }
+
+        final CheckBox vibrate_cb = (CheckBox) layout_menu_options.findViewById(R.id.vibrate_cb);
+        vibrate_cb.setChecked(sharedPreferences.getBoolean(VIBRATION_PREFERENCE_KEY, true));
+
+        final CheckBox buzzer_cb = (CheckBox) layout_menu_options.findViewById(R.id.buzzer_cb);
+        buzzer_cb.setChecked(sharedPreferences.getBoolean(BUZZER_PREFERENCE_KEY, true));
+
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(getString(R.string.menuTitle));
+        alertBuilder.setView(layout_menu_options);
+        alertBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialogInterface, final int n) {
+                final int resultingMins = minutes_numberPicker.getValue();
+                final int resultingSeconds = seconds_numberPicker.getValue();
+
+                final long matchLength_milli = (resultingMins * 60 + resultingSeconds) * 1000;
+
+                final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putLong(MATCH_LENGTH_PREFERENCE_KEY, matchLength_milli);
+
+                final Spinner playerColorLeft_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorLeft_spinner);
+                final int resultingColor_left = (Integer) playerColorLeft_spinner.getSelectedItem();
+                editor.putInt(LEFT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_left);
+
+                final Spinner playerColorRight_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorRight_spinner);
+                final int resultingColor_right = (Integer) playerColorRight_spinner.getSelectedItem();
+                editor.putInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_right);
+
+                editor.putBoolean(VIBRATION_PREFERENCE_KEY, vibrate_cb.isChecked());
+
+                editor.putBoolean(BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
+
+                editor.commit();
+
+                resetState();
+
+            }
+        });
+        alertBuilder.setNegativeButton(getString(android.R.string.cancel), null);
+        alertBuilder.create().show();
+    }
+
+    public class PlayerColorAdapter extends ArrayAdapter<Integer> {
+        public PlayerColorAdapter(Context context, int resource, List<Integer> items) {
+            super(context, resource, items);
+        }
+
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+
+            if (convertView == null) {
+                final LayoutInflater vi = LayoutInflater.from(getContext());
+                convertView = vi.inflate(R.layout.layout_jam_spinner_item, null);
+            }
+
+
+            final int color = getItem(position);
+
+            TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
+            text1.setBackgroundColor(color);
+
+            return convertView;
+        }
+    }
+
 }
