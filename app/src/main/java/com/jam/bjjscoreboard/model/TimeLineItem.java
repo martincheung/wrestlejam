@@ -8,20 +8,40 @@ import android.os.Parcelable;
  */
 public class TimeLineItem implements Comparable<TimeLineItem>, Parcelable {
 
-    private Scoreboard.TimeLineType moveType;
+    private Scoreboard.TimeLineType timeLineType;
     private long timeInMilli;
 
-    public TimeLineItem(final Scoreboard.TimeLineType moveType, final long timeInMilli) {
-        this.moveType = moveType;
+    public TimeLineItem(final Scoreboard.TimeLineType timeLineType, final long timeInMilli) {
+        this.timeLineType = timeLineType;
         this.timeInMilli = timeInMilli;
     }
 
-    public Scoreboard.TimeLineType getMoveType() {
-        return moveType;
+    public Scoreboard.TimeLineType getTimeLineType() {
+        return timeLineType;
     }
 
     public long getTimeInMilli() {
         return timeInMilli;
+    }
+
+    private static Scoreboard.TimeLineType getProperTimeLineTypeFromString(final String timeLineTypeAsString) {
+
+        final Scoreboard.MoveType[] moveTypes = Scoreboard.MoveType.values();
+        for (final Scoreboard.MoveType moveType : moveTypes) {
+            if (moveType.name().equals(timeLineTypeAsString)) {
+                return moveType;
+            }
+        }
+
+        final Scoreboard.WinType[] winTypes = Scoreboard.WinType.values();
+        for (final Scoreboard.WinType winType : winTypes) {
+            if (winType.name().equals(timeLineTypeAsString)) {
+                return winType;
+            }
+        }
+
+        return null;
+
     }
 
     @Override
@@ -30,7 +50,7 @@ public class TimeLineItem implements Comparable<TimeLineItem>, Parcelable {
     }
 
     protected TimeLineItem(Parcel in) {
-        moveType = Scoreboard.MoveType.valueOf(in.readString());
+        timeLineType = getProperTimeLineTypeFromString(in.readString());
         timeInMilli = in.readLong();
     }
 
@@ -41,7 +61,7 @@ public class TimeLineItem implements Comparable<TimeLineItem>, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(moveType.name());
+        dest.writeString(timeLineType == null ? "" : timeLineType.name());
         dest.writeLong(timeInMilli);
     }
 

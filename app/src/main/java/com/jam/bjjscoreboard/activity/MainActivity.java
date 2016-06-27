@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -31,11 +32,12 @@ import com.jam.bjjscoreboard.R;
 import com.jam.bjjscoreboard.eventListener.OnScoreboardChangeListener;
 import com.jam.bjjscoreboard.model.Scoreboard;
 import com.jam.bjjscoreboard.model.TimeLineItem;
+import com.jam.bjjscoreboard.util.PreferenceUtil;
+import com.jam.bjjscoreboard.util.TimeUtil;
 import com.jam.bjjscoreboard.widget.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity implements OnScoreboardChangeListener, View.OnClickListener {
 
@@ -167,65 +169,20 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     // timer
     public final static long DEFAULT_MATCH_LENGTH_IN_MILLI = 300000; //5 minutes
-    public final static String MATCH_LENGTH_PREFERENCE_KEY = "matchLengthPreference";
-
-    private long getPreferredMatchLength() {
-        return sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI);
-    }
-
-    // name
-    public final static String LEFT_PLAYER_NAME_PREFERENCE_KEY = "leftPlayerNamePreference";
-    public final static String RIGHT_PLAYER_NAME_PREFERENCE_KEY = "rightPlayerNamePreference";
-
-    public String getPreferredLeftPlayerName() {
-        return sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultLeftPlayerName));
-    }
-
-    public String getPreferredRightPlayerName() {
-        return sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultRightPlayerName));
-    }
 
     // feedback
     private Vibrator vibrator;
     public final static int VIBRATION_LENGTH_IN_MILLI = 50;
-    public final static String VIBRATION_PREFERENCE_KEY = "vibrationPreference";
-
-    private boolean isVibrationPreferred() {
-        return sharedPreferences.getBoolean(VIBRATION_PREFERENCE_KEY, true);
-    }
 
     public final static int TEXT_HIGHLIGHT_DURATION_IN_MILLI = 500;
 
-    public final static String BUZZER_PREFERENCE_KEY = "buzzerPreference";
-
-    private boolean isBuzzerPreferred() {
-        return sharedPreferences.getBoolean(BUZZER_PREFERENCE_KEY, true);
-    }
-
     // color
     private PlayerColorAdapter playerColorAdapter;
-
-    public final static String LEFT_PLAYER_COLOR_PREFERENCE_KEY = "leftPlayerColorPreference";
-    public final static String RIGHT_PLAYER_COLOR_PREFERENCE_KEY = "rightPlayerColorPreference";
-
-    private int getPreferredLeftPlayerColor() {
-        return sharedPreferences.getInt(LEFT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_blue_dark));
-    }
-
-    private int getPreferredRightPlayerColor() {
-        return sharedPreferences.getInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_red_dark));
-    }
 
     // -------------------
     // Ads
     // -------------------
     private InterstitialAd mInterstitialAd;
-    public final static String AD_COUNTER_PREFERENCE_KEY = "adCounterPreference";
-    public final static int AD_COUNTER_MAX = 10;
-
-    private int getAdCounter() {
-        return sharedPreferences.getInt(AD_COUNTER_PREFERENCE_KEY, 0);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -422,7 +379,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     private void resetState() {
         if (timer != null) {
-            timer.setText(milliToTimeFormat(getPreferredMatchLength()));
+            timer.setText(TimeUtil.milliToTimeFormat(PreferenceUtil.getMatchLength(sharedPreferences)));
         }
         if (combate != null) {
             combate.setText(getString(R.string.combate));
@@ -431,48 +388,36 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
             menu_button.setAlpha(1.0f);
         }
         if (leftPlayerDisplay != null) {
-            leftPlayerDisplay.setBackgroundColor(getPreferredLeftPlayerColor());
+            leftPlayerDisplay.setBackgroundColor(PreferenceUtil.getPreferredLeftPlayerColor(sharedPreferences, this));
         }
         if (rightPlayerDisplay != null) {
-            rightPlayerDisplay.setBackgroundColor(getPreferredRightPlayerColor());
+            rightPlayerDisplay.setBackgroundColor(PreferenceUtil.getPreferredRightPlayerColor(sharedPreferences, this));
         }
         if (leftPlayerName != null) {
-            leftPlayerName.setText(getPreferredLeftPlayerName());
+            leftPlayerName.setText(PreferenceUtil.getLeftPlayerName(sharedPreferences, this));
         }
         if (rightPlayerName != null) {
-            rightPlayerName.setText(getPreferredRightPlayerName());
+            rightPlayerName.setText(PreferenceUtil.getRightPlayerName(sharedPreferences, this));
         }
-    }
-
-    private static String milliToTimeFormat(final long milli) {
-        return String.format("%d:%02d", toMinutes(milli), toSeconds(milli));
-    }
-
-    private static long toMinutes(final long milli) {
-        return TimeUnit.MILLISECONDS.toMinutes(milli);
-    }
-
-    private static long toSeconds(final long milli) {
-        return TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     }
 
     @Override
     public void onCountDownTick(long millisUntilFinished) {
 
-        timer.setText(milliToTimeFormat(millisUntilFinished));
+        timer.setText(TimeUtil.milliToTimeFormat(millisUntilFinished));
     }
 
     @Override
     public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType, final long finalTimeInMilli) {
 
-        int currentAdCounter = getAdCounter();
+        int currentAdCounter = PreferenceUtil.getAdCounter(sharedPreferences);
         currentAdCounter++;
-        if (currentAdCounter >= AD_COUNTER_MAX) {
+        if (currentAdCounter >= PreferenceUtil.AD_COUNTER_MAX) {
             currentAdCounter = 0;
         }
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putInt(AD_COUNTER_PREFERENCE_KEY, currentAdCounter);
+        editor.putInt(PreferenceUtil.AD_COUNTER_PREFERENCE_KEY, currentAdCounter);
         editor.commit();
 
         if (currentAdCounter == 0) {
@@ -491,47 +436,18 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     private void gotoResults(Scoreboard.Practitioner winner, Scoreboard.WinType winType, final List<TimeLineItem> timeLineList_left, final List<TimeLineItem> timeLineList_right) {
 
-        final String leftPlayerName = getPreferredLeftPlayerName();
-        final String rightPlayerName = getPreferredRightPlayerName();
-
-        String resultMessage = "";
-
-        if (winType == Scoreboard.WinType.POINTS) {
-            if (winner == Scoreboard.Practitioner.LEFT) {
-                resultMessage = getString(R.string.winByPoints, leftPlayerName, rightPlayerName);
-            } else if (winner == Scoreboard.Practitioner.RIGHT) {
-                resultMessage = getString(R.string.winByPoints, rightPlayerName, leftPlayerName);
-            } else {//Tie
-                resultMessage = getString(R.string.tieMsg);
-            }
-        } else if (winner != null) {
-            if (winType == Scoreboard.WinType.TAP_OUT) {
-                if (winner == Scoreboard.Practitioner.LEFT) {
-                    resultMessage = getString(R.string.winByTap, leftPlayerName, rightPlayerName);
-                } else {//RIGHT
-                    resultMessage = getString(R.string.winByTap, rightPlayerName, leftPlayerName);
-                }
-            } else {//Scoreboard.WinType.DQ
-                if (winner == Scoreboard.Practitioner.LEFT) {
-                    resultMessage = getString(R.string.winByDQ, leftPlayerName, rightPlayerName);
-                } else {//RIGHT
-                    resultMessage = getString(R.string.winByDQ, rightPlayerName, leftPlayerName);
-                }
-            }
-        } else {
+        if (winner == null && winType == null) {
             return;
         }
+        final Intent intent = new Intent(this, ResultsActivity.class);
 
-        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle(resultMessage);
-        alertBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialogInterface, final int n) {
+        intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_LEFT, (ArrayList<TimeLineItem>) timeLineList_left);
+        intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_RIGHT, (ArrayList<TimeLineItem>) timeLineList_right);
+        intent.putExtra(ResultsActivity.INTENT_WINNER, winner);
+        intent.putExtra(ResultsActivity.INTENT_WIN_TYPE, winType);
+        startActivity(intent);
 
 
-            }
-        });
-        alertBuilder.setNegativeButton(getString(android.R.string.cancel), null);
-        alertBuilder.create().show();
     }
 
     @Override
@@ -579,7 +495,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     @Override
     public void onMoveActionStatusUpdate(final Scoreboard.Practitioner practitioner, final Scoreboard.MoveType moveType, boolean success) {
         if (success) {
-            if (isVibrationPreferred())
+            if (PreferenceUtil.isVibrationPreferred(sharedPreferences))
                 vibrator.vibrate(VIBRATION_LENGTH_IN_MILLI);
 
             final int textHighlight_color = getResources().getColor(R.color.textHighlight);
@@ -668,14 +584,14 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         //Center buttons
         if (v.getId() == R.id.timer) {
             if (!scoreboard.hasCountDownStarted())
-                scoreboard.startTimer(getPreferredMatchLength());
+                scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
             else if (scoreboard.isTimerPaused())
                 scoreboard.resumeTimer();
             else
                 scoreboard.pauseTimer();
         } else if (v.getId() == R.id.combate) {
             if (!scoreboard.hasCountDownStarted())
-                scoreboard.startTimer(getPreferredMatchLength());
+                scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
             else
                 openEndingOptions();
         } else if (v.getId() == R.id.menu_button) {
@@ -808,8 +724,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
         scoreboard.pauseTimer();
 
-        final String leftPlayerName = getPreferredLeftPlayerName();
-        final String rightPlayerName = getPreferredRightPlayerName();
+        final String leftPlayerName = PreferenceUtil.getLeftPlayerName(sharedPreferences, this);
+        final String rightPlayerName = PreferenceUtil.getRightPlayerName(sharedPreferences, this);
 
         final RadioGroup rg = new RadioGroup(this);
         rg.setOrientation(RadioGroup.VERTICAL);
@@ -892,7 +808,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
             return;
         }
 
-        final String playerName = isLeft ? getPreferredLeftPlayerName() : getPreferredRightPlayerName();
+        final String playerName = isLeft ? PreferenceUtil.getLeftPlayerName(sharedPreferences, this) : PreferenceUtil.getRightPlayerName(sharedPreferences, this);
 
         final EditText playerName_et = new EditText(this);
         playerName_et.setText(playerName);
@@ -907,7 +823,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
-                editor.putString(isLeft ? LEFT_PLAYER_NAME_PREFERENCE_KEY : RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerName_et.getText().toString());
+                editor.putString(isLeft ? PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY : PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerName_et.getText().toString());
 
                 editor.commit();
 
@@ -931,12 +847,12 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         final View layout_menu_options = LayoutInflater.from(this).inflate(R.layout.layout_menu_options, (ScrollView) findViewById(R.id.layout_menu_options_rootLayout));
 
         final EditText playerLeft_et = (EditText) layout_menu_options.findViewById(R.id.playerLeft_et);
-        playerLeft_et.setText(getPreferredLeftPlayerName());
+        playerLeft_et.setText(PreferenceUtil.getLeftPlayerName(sharedPreferences, this));
         final EditText playerRight_et = (EditText) layout_menu_options.findViewById(R.id.playerRight_et);
-        playerRight_et.setText(getPreferredRightPlayerName());
+        playerRight_et.setText(PreferenceUtil.getRightPlayerName(sharedPreferences, this));
 
-        final int minutes = (int) toMinutes(getPreferredMatchLength());
-        final int seconds = (int) toSeconds(getPreferredMatchLength());
+        final int minutes = (int) TimeUtil.toMinutes(PreferenceUtil.getMatchLength(sharedPreferences));
+        final int seconds = (int) TimeUtil.toSeconds(PreferenceUtil.getMatchLength(sharedPreferences));
 
         final NumberPicker minutes_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.minutes_numberPicker);
         minutes_numberPicker.setValue(minutes);
@@ -962,8 +878,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 }
             });
 
-            final int leftPlayerColor = getPreferredLeftPlayerColor();
-            final int rightPlayerColor = getPreferredRightPlayerColor();
+            final int leftPlayerColor = PreferenceUtil.getPreferredLeftPlayerColor(sharedPreferences, this);
+            final int rightPlayerColor = PreferenceUtil.getPreferredRightPlayerColor(sharedPreferences, this);
 
             int spinnerPosition = playerColorAdapter.getPosition(isLeft ? leftPlayerColor : rightPlayerColor);
             playerColor_spinner.setSelection(spinnerPosition, false);
@@ -971,10 +887,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         }
 
         final CheckBox vibrate_cb = (CheckBox) layout_menu_options.findViewById(R.id.vibrate_cb);
-        vibrate_cb.setChecked(isVibrationPreferred());
+        vibrate_cb.setChecked(PreferenceUtil.isVibrationPreferred(sharedPreferences));
 
         final CheckBox buzzer_cb = (CheckBox) layout_menu_options.findViewById(R.id.buzzer_cb);
-        buzzer_cb.setChecked(isBuzzerPreferred());
+        buzzer_cb.setChecked(PreferenceUtil.isBuzzerPreferred(sharedPreferences));
 
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle(getString(R.string.menuTitle));
@@ -988,22 +904,22 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                editor.putLong(MATCH_LENGTH_PREFERENCE_KEY, matchLength_milli);
+                editor.putLong(PreferenceUtil.MATCH_LENGTH_PREFERENCE_KEY, matchLength_milli);
 
                 final Spinner playerColorLeft_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorLeft_spinner);
                 final int resultingColor_left = (Integer) playerColorLeft_spinner.getSelectedItem();
-                editor.putInt(LEFT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_left);
+                editor.putInt(PreferenceUtil.LEFT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_left);
 
                 final Spinner playerColorRight_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorRight_spinner);
                 final int resultingColor_right = (Integer) playerColorRight_spinner.getSelectedItem();
-                editor.putInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_right);
+                editor.putInt(PreferenceUtil.RIGHT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_right);
 
-                editor.putBoolean(VIBRATION_PREFERENCE_KEY, vibrate_cb.isChecked());
+                editor.putBoolean(PreferenceUtil.VIBRATION_PREFERENCE_KEY, vibrate_cb.isChecked());
 
-                editor.putBoolean(BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
+                editor.putBoolean(PreferenceUtil.BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
 
-                editor.putString(LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().toString());
-                editor.putString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().toString());
+                editor.putString(PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().toString());
+                editor.putString(PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().toString());
 
                 editor.commit();
 

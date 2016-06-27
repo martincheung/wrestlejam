@@ -115,27 +115,27 @@ public class ScoreboardTest {
         scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GUARD_PASS, 40000, false);
 
         final List<TimeLineItem> timeLine_left = scoreboard.getTimeline(Scoreboard.Practitioner.LEFT, Scoreboard.WinType.POINTS, 300000);
-        assertEquals(timeLine_left.get(0).getMoveType(), null);
+        assertEquals(timeLine_left.get(0).getTimeLineType(), null);
         assertEquals(timeLine_left.get(0).getTimeInMilli(), 0);
-        assertEquals(timeLine_left.get(1).getMoveType(), Scoreboard.MoveType.SWEEP);
+        assertEquals(timeLine_left.get(1).getTimeLineType(), Scoreboard.MoveType.SWEEP);
         assertEquals(timeLine_left.get(1).getTimeInMilli(), 8000);
-        assertEquals(timeLine_left.get(2).getMoveType(), Scoreboard.MoveType.GUARD_PASS);
+        assertEquals(timeLine_left.get(2).getTimeLineType(), Scoreboard.MoveType.GUARD_PASS);
         assertEquals(timeLine_left.get(2).getTimeInMilli(), 11500);
-        assertEquals(timeLine_left.get(3).getMoveType(), Scoreboard.MoveType.GUARD_PASS);
+        assertEquals(timeLine_left.get(3).getTimeLineType(), Scoreboard.MoveType.GUARD_PASS);
         assertEquals(timeLine_left.get(3).getTimeInMilli(), 40000);
-        assertEquals(timeLine_left.get(4).getMoveType(), Scoreboard.WinType.POINTS);
+        assertEquals(timeLine_left.get(4).getTimeLineType(), Scoreboard.WinType.POINTS);
         assertEquals(timeLine_left.get(4).getTimeInMilli(), 300000);
 
         final List<TimeLineItem> timeLine_right = scoreboard.getTimeline(Scoreboard.Practitioner.RIGHT, Scoreboard.WinType.POINTS, 300000);
-        assertEquals(timeLine_right.get(0).getMoveType(), null);
+        assertEquals(timeLine_right.get(0).getTimeLineType(), null);
         assertEquals(timeLine_right.get(0).getTimeInMilli(), 0);
-        assertEquals(timeLine_right.get(1).getMoveType(), Scoreboard.MoveType.TAKE_DOWN);
+        assertEquals(timeLine_right.get(1).getTimeLineType(), Scoreboard.MoveType.TAKE_DOWN);
         assertEquals(timeLine_right.get(1).getTimeInMilli(), 5000);
-        assertEquals(timeLine_right.get(2).getMoveType(), Scoreboard.MoveType.BACK);
+        assertEquals(timeLine_right.get(2).getTimeLineType(), Scoreboard.MoveType.BACK);
         assertEquals(timeLine_right.get(2).getTimeInMilli(), 20000);
-        assertEquals(timeLine_right.get(3).getMoveType(), Scoreboard.MoveType.MOUNT);
+        assertEquals(timeLine_right.get(3).getTimeLineType(), Scoreboard.MoveType.MOUNT);
         assertEquals(timeLine_right.get(3).getTimeInMilli(), 30000);
-        assertEquals(timeLine_right.get(4).getMoveType(), Scoreboard.WinType.POINTS);
+        assertEquals(timeLine_right.get(4).getTimeLineType(), Scoreboard.WinType.POINTS);
         assertEquals(timeLine_right.get(4).getTimeInMilli(), 300000);
     }
 }

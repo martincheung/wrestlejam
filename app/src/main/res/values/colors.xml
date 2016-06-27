@@ -10,6 +10,8 @@
     <color name="defaultText">#FFFFFF</color>
     <color name="textHighlight">#00C600</color>
 
+    <color name="brown">#49311c</color>
+
 
 
     <array name="playerColors">
@@ -18,6 +20,7 @@
         <item>@android:color/holo_green_dark</item>
         <item>@android:color/holo_orange_dark</item>
         <item>@android:color/holo_purple</item>
+        <item>@color/brown</item>
         <item>@android:color/black</item>
         <item>@android:color/darker_gray</item>
     </array>
