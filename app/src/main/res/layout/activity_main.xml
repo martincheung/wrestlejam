@@ -1054,7 +1054,7 @@
         android:paddingBottom="@dimen/tap_button_bottom_padding">
 
         <Button
-            android:id="@+id/tap"
+            android:id="@+id/combate"
             android:layout_width="@dimen/timer_tap_button_width"
             android:layout_height="@dimen/timer_tap_button_height"
             android:layout_alignParentBottom="false"

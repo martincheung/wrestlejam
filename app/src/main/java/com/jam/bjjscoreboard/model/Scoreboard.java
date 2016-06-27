@@ -18,11 +18,15 @@ public class Scoreboard {
         OVERALL, ADVANTAGE, PENALTY
     }
 
-    public enum MoveType {
+    public interface TimeLineType {
+        public String name();
+    }
+
+    public enum MoveType implements TimeLineType {
         GENERIC_4, GENERIC_3, GENERIC_2, REAR_MOUNT, MOUNT, BACK, GUARD_PASS, SWEEP, KNEE_ON_BELLY, TAKE_DOWN, ADVANTAGE, PENALTY
     }
 
-    public enum WinType {
+    public enum WinType implements TimeLineType {
         TAP_OUT, POINTS, DQ
     }
 
@@ -97,9 +101,9 @@ public class Scoreboard {
         }
     }
 
-    private void dispatchOnCountDownFinish(final Practitioner winner, final WinType winType) {
+    private void dispatchOnCountDownFinish(final Practitioner winner, final WinType winType, final long timePassed) {
         if (onScoreboardChangeListener != null) {
-            onScoreboardChangeListener.onCountDownFinish(winner, winType);
+            onScoreboardChangeListener.onCountDownFinish(winner, winType, timePassed);
         }
     }
 
@@ -209,15 +213,16 @@ public class Scoreboard {
     public void stopTimer(final Practitioner winner, final WinType winType) {
         if (countDownTimer != null) {
             countDownTimer.cancel();
-            dispatchOnCountDownFinish(winner, winType);
+            dispatchOnCountDownFinish(winner, winType,getCountDownTimePassed());
         }
         countDownTimer = null;
     }
 
+
     public long getCountDownTimePassed() {
 
         if (countDownTimer != null) {
-            countDownTimer.timePassed();
+            return countDownTimer.timePassed();
         }
         return -1;
     }
@@ -232,7 +237,7 @@ public class Scoreboard {
         return score_map.get(scoreType) == null ? 0 : score_map.get(scoreType);
     }
 
-    public Practitioner getWinnerByPoints(){
+    public Practitioner getWinnerByPoints() {
         final int overall_score_left = getScore(Practitioner.LEFT, ScoreType.OVERALL);
         final int overall_score_right = getScore(Practitioner.RIGHT, ScoreType.OVERALL);
 
@@ -316,12 +321,15 @@ public class Scoreboard {
     // Time line
     // -------------------------------
 
-    public List<TimeLineItem> getTimeline(final Practitioner practitioner) {
+    public List<TimeLineItem> getTimeline(final Practitioner practitioner, final WinType winType, final long finalTimeInMilli) {
 
 
         final Map<MoveType, List<Long>> timeline_map = practitioner_timeline_map.get(practitioner);
 
         final List<TimeLineItem> timeLineList = new ArrayList<>();
+
+        //always add start event
+        timeLineList.add(new TimeLineItem(null, 0));
 
         for (final MoveType moveType : timeline_map.keySet()) {
             final List<Long> timeList = timeline_map.get(moveType);
@@ -332,32 +340,13 @@ public class Scoreboard {
             }
         }
 
+        //the last event
+        timeLineList.add(new TimeLineItem(winType, finalTimeInMilli));
+
         Collections.sort(timeLineList);
 
         return timeLineList;
     }
 
-    public class TimeLineItem implements Comparable<TimeLineItem> {
 
-        private MoveType moveType;
-        private long timeInMilli;
-
-        public TimeLineItem(final MoveType moveType, final long timeInMilli) {
-            this.moveType = moveType;
-            this.timeInMilli = timeInMilli;
-        }
-
-        public MoveType getMoveType() {
-            return moveType;
-        }
-
-        public long getTimeInMilli() {
-            return timeInMilli;
-        }
-
-        @Override
-        public int compareTo(TimeLineItem another) {
-            return (int) (getTimeInMilli() - another.getTimeInMilli());
-        }
-    }
 }

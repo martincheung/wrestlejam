@@ -8,7 +8,7 @@ import com.jam.bjjscoreboard.model.Scoreboard;
 public interface OnScoreboardChangeListener {
 
     public void onCountDownTick(final long millisUntilFinished);
-    public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType);
+    public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType, final long timePassed);
     public void onCountDownPaused();
     public void onCountDownResume();
     public void onCountDownStart();

@@ -12,8 +12,7 @@
     <string name="pen">PEN</string>
 
     <string name="combate">Combate!</string>
-    <string name="tap">Tap!</string>
-    <string name="reset">Reset</string>
+    <string name="end">end</string>
 
     <string name="defaultLeftPlayerName">Royler Gracie</string>
     <string name="defaultRightPlayerName">Eddie Bravo</string>
@@ -30,4 +29,11 @@
 
     <string name="editing">Editing %1$s</string>
 
+    <string name="winByPoints">%1$s defeats %2$s by points</string>
+    <string name="winByTap">%1$s submits %2$s</string>
+    <string name="winByDQ">%1$s defeats %2$s via disqualification</string>
+    <string name="tieMsg">Match has ended in a draw</string>
+
+    <string name="falseStart">False start</string>
+    <string name="matchEnd">Match end</string>
 </resources>
