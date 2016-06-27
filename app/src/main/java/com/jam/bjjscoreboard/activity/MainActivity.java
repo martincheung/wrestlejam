@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -254,7 +255,6 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
         leftPlayerName = (TextView) findViewById(R.id.leftPlayerName);
         leftPlayerName.setOnClickListener(this);
-        leftPlayerName.setText(sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultLeftPlayerName)));
 
         leftPlayerDisplay = (ViewGroup) findViewById(R.id.leftPlayerDisplay);
 
@@ -317,7 +317,6 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
         rightPlayerName = (TextView) findViewById(R.id.rightPlayerName);
         rightPlayerName.setOnClickListener(this);
-        rightPlayerName.setText(sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultRightPlayerName)));
 
         rightPlayerDisplay = (ViewGroup) findViewById(R.id.rightPlayerDisplay);
 
@@ -367,7 +366,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("20F25CE6BD544C548D75E79DFE95B078")  //Andrew's Galaxy Prime
+                .addTestDevice("F4C8C07D7FD2DA367E1CCC6EE0B99E7F")  //Jonathan's Nexus 7 2013
+                .addTestDevice("D9E60E8355A420B28265C56D517A4470")  //Martin's Nexus 7
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }
@@ -388,6 +390,12 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         }
         if (rightPlayerDisplay != null) {
             rightPlayerDisplay.setBackgroundColor(sharedPreferences.getInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, getResources().getColor(android.R.color.holo_red_dark)));
+        }
+        if (leftPlayerName != null) {
+            leftPlayerName.setText(sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultLeftPlayerName)));
+        }
+        if (rightPlayerName != null) {
+            rightPlayerName.setText(sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultRightPlayerName)));
         }
     }
 
@@ -411,7 +419,12 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType) {
+        //This is where the ad comes up. The ad only comes up if it is loaded
+        //If it is not loaded, we can do an else to go through with whatever other action
 
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
         resetState();
         if (winType == Scoreboard.WinType.POINTS) {
             if (winner == Scoreboard.Practitioner.LEFT) {
@@ -453,13 +466,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     public void onCountDownStart() {
 
         tap.setText(getString(R.string.tap));
-		menu_button.setAlpha(0.5f);
-        //This is where the ad comes up. The ad only comes up if it is loaded
-        //If it is not loaded, we can do an else to go through with whatever other action
+        menu_button.setAlpha(0.5f);
 
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        }
     }
 
     @Override
@@ -591,6 +599,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 scoreboard.stopTimer(Scoreboard.Practitioner.LEFT, Scoreboard.WinType.TAP_OUT);
         } else if (v.getId() == R.id.menu_button) {
             openMenu();
+        } else if (v.getId() == R.id.leftPlayerName) {
+            openPlayerNameEditor(true);
+        } else if (v.getId() == R.id.rightPlayerName) {
+            openPlayerNameEditor(false);
         } else if (!scoreboard.isTimerPaused()) {
             //Move actions
             switch (v.getId()) {
@@ -708,16 +720,56 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     }
 
     // --------------------
+    // Player name editor
+    // --------------------
+
+    private void openPlayerNameEditor(final boolean isLeft) {
+        if (scoreboard.hasCountDownStarted()) {
+            return;
+        }
+
+        final String playerName = isLeft ? sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultLeftPlayerName)) : sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultRightPlayerName));
+
+        final EditText playerName_et = new EditText(this);
+        playerName_et.setText(playerName);
+
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(getString(R.string.editing, playerName));
+        alertBuilder.setView(playerName_et);
+        alertBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialogInterface, final int n) {
+
+
+                final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+                editor.putString(isLeft ? LEFT_PLAYER_NAME_PREFERENCE_KEY : RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerName_et.getText().toString());
+
+                editor.commit();
+
+                resetState();
+
+            }
+        });
+        alertBuilder.setNegativeButton(getString(android.R.string.cancel), null);
+        alertBuilder.create().show();
+    }
+
+    // --------------------
     // Menu
     // --------------------
 
 
     private void openMenu() {
         if (scoreboard.hasCountDownStarted()) {
-
             return;
         }
         final View layout_menu_options = LayoutInflater.from(this).inflate(R.layout.layout_menu_options, (ScrollView) findViewById(R.id.layout_menu_options_rootLayout));
+
+        final EditText playerLeft_et = (EditText) layout_menu_options.findViewById(R.id.playerLeft_et);
+        playerLeft_et.setText(sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultLeftPlayerName)));
+        final EditText playerRight_et = (EditText) layout_menu_options.findViewById(R.id.playerRight_et);
+        playerRight_et.setText(sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, getString(R.string.defaultRightPlayerName)));
 
         final int minutes = (int) toMinutes(sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI));
         final int seconds = (int) toSeconds(sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, DEFAULT_MATCH_LENGTH_IN_MILLI));
@@ -727,7 +779,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         final NumberPicker seconds_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.seconds_numberPicker);
         seconds_numberPicker.setValue(seconds);
 
-
+        //loop for 2 players
         for (int i = 0; i < 2; i++) {
 
             final boolean isLeft = i == 0;
@@ -785,6 +837,9 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 editor.putBoolean(VIBRATION_PREFERENCE_KEY, vibrate_cb.isChecked());
 
                 editor.putBoolean(BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
+
+                editor.putString(LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().toString());
+                editor.putString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().toString());
 
                 editor.commit();
 

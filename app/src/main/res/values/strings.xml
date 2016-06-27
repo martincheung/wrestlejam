@@ -27,4 +27,7 @@
     <string name="buzzer">Buzzer on match end</string>
     <string name="matchLength">Match length</string>
 
+
+    <string name="editing">Editing %1$s</string>
+
 </resources>
