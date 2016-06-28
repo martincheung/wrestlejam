@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -48,7 +47,18 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     // Left player IDs
     // ------------------
 
-    //Controls
+    //Basic Controls
+
+    private View generic4_add_left;
+    private View generic4_subtract_left;
+
+    private View generic3_add_left;
+    private View generic3_subtract_left;
+
+    private View generic2_add_left;
+    private View generic2_subtract_left;
+
+    //Advanced Controls
 
     private View rearMount_add_left;
     private View rearMount_subtract_left;
@@ -89,6 +99,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     //Groupings
 
+    private ViewGroup generic4_group_left;
+    private ViewGroup generic3_group_left;
+    private ViewGroup generic2_group_left;
+
     private ViewGroup rearMount_group_left;
     private ViewGroup mount_group_left;
     private ViewGroup back_group_left;
@@ -98,9 +112,23 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     private ViewGroup kneeOnBelly_group_left;
 
     private ViewGroup leftPlayerDisplay;
+    private ViewGroup leftPlayerControls_basic;
+    private ViewGroup leftPlayerControls_advanced;
+
     // ------------------
     // Right player IDs
     // ------------------
+
+    //Basic Controls
+
+    private View generic4_add_right;
+    private View generic4_subtract_right;
+
+    private View generic3_add_right;
+    private View generic3_subtract_right;
+
+    private View generic2_add_right;
+    private View generic2_subtract_right;
 
     //Controls
 
@@ -143,6 +171,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     //Groupings
 
+    private ViewGroup generic4_group_right;
+    private ViewGroup generic3_group_right;
+    private ViewGroup generic2_group_right;
+
     private ViewGroup rearMount_group_right;
     private ViewGroup mount_group_right;
     private ViewGroup back_group_right;
@@ -152,6 +184,9 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     private ViewGroup kneeOnBelly_group_right;
 
     private ViewGroup rightPlayerDisplay;
+    ;
+    private ViewGroup rightPlayerControls_basic;
+    private ViewGroup rightPlayerControls_advanced;
 
     // ------------------
     // Center buttons
@@ -193,6 +228,24 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Left player IDs
+        generic4_add_left = findViewById(R.id.generic4_add_left);
+        generic4_add_left.setOnClickListener(this);
+        generic4_subtract_left = findViewById(R.id.generic4_subtract_left);
+        generic4_subtract_left.setOnClickListener(this);
+        generic4_group_left = (ViewGroup) findViewById(R.id.generic4_group_left);
+
+        generic3_add_left = findViewById(R.id.generic3_add_left);
+        generic3_add_left.setOnClickListener(this);
+        generic3_subtract_left = findViewById(R.id.generic3_subtract_left);
+        generic3_subtract_left.setOnClickListener(this);
+        generic3_group_left = (ViewGroup) findViewById(R.id.generic3_group_left);
+
+        generic2_add_left = findViewById(R.id.generic2_add_left);
+        generic2_add_left.setOnClickListener(this);
+        generic2_subtract_left = findViewById(R.id.generic2_subtract_left);
+        generic2_subtract_left.setOnClickListener(this);
+        generic2_group_left = (ViewGroup) findViewById(R.id.generic2_group_left);
+
         rearMount_add_left = findViewById(R.id.rearMount_add_left);
         rearMount_add_left.setOnClickListener(this);
         rearMount_subtract_left = findViewById(R.id.rearMount_subtract_left);
@@ -253,8 +306,28 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         leftPlayerName.setOnClickListener(this);
 
         leftPlayerDisplay = (ViewGroup) findViewById(R.id.leftPlayerDisplay);
+        leftPlayerControls_basic = (ViewGroup) findViewById(R.id.leftPlayerControls_basic);
+        leftPlayerControls_advanced = (ViewGroup) findViewById(R.id.leftPlayerControls_advanced);
 
         // Right player IDs
+        generic4_add_right = findViewById(R.id.generic4_add_right);
+        generic4_add_right.setOnClickListener(this);
+        generic4_subtract_right = findViewById(R.id.generic4_subtract_right);
+        generic4_subtract_right.setOnClickListener(this);
+        generic4_group_right = (ViewGroup) findViewById(R.id.generic4_group_right);
+
+        generic3_add_right = findViewById(R.id.generic3_add_right);
+        generic3_add_right.setOnClickListener(this);
+        generic3_subtract_right = findViewById(R.id.generic3_subtract_right);
+        generic3_subtract_right.setOnClickListener(this);
+        generic3_group_right = (ViewGroup) findViewById(R.id.generic3_group_right);
+
+        generic2_add_right = findViewById(R.id.generic2_add_right);
+        generic2_add_right.setOnClickListener(this);
+        generic2_subtract_right = findViewById(R.id.generic2_subtract_right);
+        generic2_subtract_right.setOnClickListener(this);
+        generic2_group_right = (ViewGroup) findViewById(R.id.generic2_group_right);
+
         rearMount_add_right = findViewById(R.id.rearMount_add_right);
         rearMount_add_right.setOnClickListener(this);
         rearMount_subtract_right = findViewById(R.id.rearMount_subtract_right);
@@ -315,6 +388,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         rightPlayerName.setOnClickListener(this);
 
         rightPlayerDisplay = (ViewGroup) findViewById(R.id.rightPlayerDisplay);
+        rightPlayerControls_basic = (ViewGroup) findViewById(R.id.rightPlayerControls_basic);
+        rightPlayerControls_advanced = (ViewGroup) findViewById(R.id.rightPlayerControls_advanced);
 
         //Buttons
 
@@ -388,16 +463,24 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
             menu_button.setAlpha(1.0f);
         }
         if (leftPlayerDisplay != null) {
-            leftPlayerDisplay.setBackgroundColor(PreferenceUtil.getPreferredLeftPlayerColor(sharedPreferences, this));
+            leftPlayerDisplay.setBackgroundColor(PreferenceUtil.getLeftPlayerColor(sharedPreferences, this));
         }
         if (rightPlayerDisplay != null) {
-            rightPlayerDisplay.setBackgroundColor(PreferenceUtil.getPreferredRightPlayerColor(sharedPreferences, this));
+            rightPlayerDisplay.setBackgroundColor(PreferenceUtil.getRightPlayerColor(sharedPreferences, this));
         }
         if (leftPlayerName != null) {
             leftPlayerName.setText(PreferenceUtil.getLeftPlayerName(sharedPreferences, this));
         }
         if (rightPlayerName != null) {
             rightPlayerName.setText(PreferenceUtil.getRightPlayerName(sharedPreferences, this));
+        }
+        if (leftPlayerControls_basic != null && leftPlayerControls_advanced != null) {
+            leftPlayerControls_basic.setVisibility(PreferenceUtil.isBasicViewMode(sharedPreferences) ? View.VISIBLE : View.GONE);
+            leftPlayerControls_advanced.setVisibility(PreferenceUtil.isBasicViewMode(sharedPreferences) ? View.GONE : View.VISIBLE);
+        }
+        if (rightPlayerControls_basic != null && rightPlayerControls_advanced != null) {
+            rightPlayerControls_basic.setVisibility(PreferenceUtil.isBasicViewMode(sharedPreferences) ? View.VISIBLE : View.GONE);
+            rightPlayerControls_advanced.setVisibility(PreferenceUtil.isBasicViewMode(sharedPreferences) ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -495,7 +578,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     @Override
     public void onMoveActionStatusUpdate(final Scoreboard.Practitioner practitioner, final Scoreboard.MoveType moveType, boolean success) {
         if (success) {
-            if (PreferenceUtil.isVibrationPreferred(sharedPreferences))
+            if (PreferenceUtil.isVibrationOn(sharedPreferences))
                 vibrator.vibrate(VIBRATION_LENGTH_IN_MILLI);
 
             final int textHighlight_color = getResources().getColor(R.color.textHighlight);
@@ -504,8 +587,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 case REAR_MOUNT:
                 case MOUNT:
                 case BACK:
+                case GENERIC_4:
                     destination_color = getResources().getColor(R.color.score4);
                     break;
+                case GENERIC_3:
                 case GUARD_PASS:
                     destination_color = getResources().getColor(R.color.score3);
                     break;
@@ -522,6 +607,15 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                     switch (practitioner) {
                         case LEFT:
                             switch (moveType) {
+                                case GENERIC_4:
+                                    generic4_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case GENERIC_3:
+                                    generic3_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case GENERIC_2:
+                                    generic2_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
                                 case REAR_MOUNT:
                                     rearMount_group_left.setBackgroundColor((Integer) animator.getAnimatedValue());
                                     break;
@@ -547,6 +641,15 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                             break;
                         case RIGHT:
                             switch (moveType) {
+                                case GENERIC_4:
+                                    generic4_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case GENERIC_3:
+                                    generic3_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
+                                case GENERIC_2:
+                                    generic2_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                    break;
                                 case REAR_MOUNT:
                                     rearMount_group_right.setBackgroundColor((Integer) animator.getAnimatedValue());
                                     break;
@@ -603,6 +706,24 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         } else if (!scoreboard.isTimerPaused()) {
             //Move actions
             switch (v.getId()) {
+                case R.id.generic4_add_left:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_4, false);
+                    break;
+                case R.id.generic4_subtract_left:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_4, true);
+                    break;
+                case R.id.generic3_add_left:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, false);
+                    break;
+                case R.id.generic3_subtract_left:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, true);
+                    break;
+                case R.id.generic2_add_left:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, false);
+                    break;
+                case R.id.generic2_subtract_left:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, true);
+                    break;
                 case R.id.rearMount_add_left:
                     scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.REAR_MOUNT, false);
                     break;
@@ -658,6 +779,24 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                     scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.PENALTY, true);
                     break;
 
+                case R.id.generic4_add_right:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, false);
+                    break;
+                case R.id.generic4_subtract_right:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, true);
+                    break;
+                case R.id.generic3_add_right:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_3, false);
+                    break;
+                case R.id.generic3_subtract_right:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_3, true);
+                    break;
+                case R.id.generic2_add_right:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_2, false);
+                    break;
+                case R.id.generic2_subtract_right:
+                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_2, true);
+                    break;
                 case R.id.rearMount_add_right:
                     scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.REAR_MOUNT, false);
                     break;
@@ -846,6 +985,15 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         }
         final View layout_menu_options = LayoutInflater.from(this).inflate(R.layout.layout_menu_options, (ScrollView) findViewById(R.id.layout_menu_options_rootLayout));
 
+        final RadioButton basicViewMode_rb = (RadioButton) layout_menu_options.findViewById(R.id.basicViewMode_rb);
+        final RadioButton advanceViewMode_rb = (RadioButton) layout_menu_options.findViewById(R.id.advanceViewMode_rb);
+
+        if (PreferenceUtil.isBasicViewMode(sharedPreferences)) {
+            basicViewMode_rb.setChecked(true);
+        } else {
+            advanceViewMode_rb.setChecked(true);
+        }
+
         final EditText playerLeft_et = (EditText) layout_menu_options.findViewById(R.id.playerLeft_et);
         playerLeft_et.setText(PreferenceUtil.getLeftPlayerName(sharedPreferences, this));
         final EditText playerRight_et = (EditText) layout_menu_options.findViewById(R.id.playerRight_et);
@@ -866,20 +1014,9 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
             final Spinner playerColor_spinner = (Spinner) (isLeft ? layout_menu_options.findViewById(R.id.playerColorLeft_spinner) : layout_menu_options.findViewById(R.id.playerColorRight_spinner));
             playerColor_spinner.setAdapter(playerColorAdapter);
-            playerColor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-            final int leftPlayerColor = PreferenceUtil.getPreferredLeftPlayerColor(sharedPreferences, this);
-            final int rightPlayerColor = PreferenceUtil.getPreferredRightPlayerColor(sharedPreferences, this);
+            final int leftPlayerColor = PreferenceUtil.getLeftPlayerColor(sharedPreferences, this);
+            final int rightPlayerColor = PreferenceUtil.getRightPlayerColor(sharedPreferences, this);
 
             int spinnerPosition = playerColorAdapter.getPosition(isLeft ? leftPlayerColor : rightPlayerColor);
             playerColor_spinner.setSelection(spinnerPosition, false);
@@ -887,16 +1024,21 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         }
 
         final CheckBox vibrate_cb = (CheckBox) layout_menu_options.findViewById(R.id.vibrate_cb);
-        vibrate_cb.setChecked(PreferenceUtil.isVibrationPreferred(sharedPreferences));
+        vibrate_cb.setChecked(PreferenceUtil.isVibrationOn(sharedPreferences));
 
         final CheckBox buzzer_cb = (CheckBox) layout_menu_options.findViewById(R.id.buzzer_cb);
-        buzzer_cb.setChecked(PreferenceUtil.isBuzzerPreferred(sharedPreferences));
+        buzzer_cb.setChecked(PreferenceUtil.isBuzzerOn(sharedPreferences));
 
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle(getString(R.string.menuTitle));
         alertBuilder.setView(layout_menu_options);
         alertBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialogInterface, final int n) {
+
+                final boolean viewModeChanged = PreferenceUtil.isBasicViewMode(sharedPreferences) != basicViewMode_rb.isChecked();
+                if (viewModeChanged)
+                    scoreboard.reset();
+
                 final int resultingMins = minutes_numberPicker.getValue();
                 final int resultingSeconds = seconds_numberPicker.getValue();
 
@@ -920,6 +1062,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
                 editor.putString(PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().toString());
                 editor.putString(PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().toString());
+
+                editor.putBoolean(PreferenceUtil.BASIC_VIEW_MODE_PREFERENCE_KEY, basicViewMode_rb.isChecked());
 
                 editor.commit();
 

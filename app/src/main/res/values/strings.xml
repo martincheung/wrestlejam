@@ -20,12 +20,15 @@
     <string name="menuTitle">Menu</string>
 
 
+    <string name="viewMode">View mode</string>
     <string name="players">Players</string>
     <string name="feedBack">Feedback</string>
     <string name="vibrateOnScoreChange">Vibrate on score change</string>
     <string name="buzzer">Buzzer on match end</string>
     <string name="matchLength">Match length</string>
 
+    <string name="basicViewMode">Basic</string>
+    <string name="advanceViewMode">Advance</string>
 
     <string name="editing">Editing %1$s</string>
 

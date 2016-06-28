@@ -19,6 +19,7 @@ public class PreferenceUtil {
     public final static String RIGHT_PLAYER_COLOR_PREFERENCE_KEY = "rightPlayerColorPreference";
     public final static String AD_COUNTER_PREFERENCE_KEY = "adCounterPreference";
     public final static int AD_COUNTER_MAX = 10;
+    public final static String BASIC_VIEW_MODE_PREFERENCE_KEY = "viewModePreference";
 
     public static long getMatchLength(final SharedPreferences sharedPreferences) {
         return sharedPreferences.getLong(MATCH_LENGTH_PREFERENCE_KEY, MainActivity.DEFAULT_MATCH_LENGTH_IN_MILLI);
@@ -28,27 +29,31 @@ public class PreferenceUtil {
         return sharedPreferences.getString(LEFT_PLAYER_NAME_PREFERENCE_KEY, context.getString(R.string.defaultLeftPlayerName));
     }
 
-    public static String  getRightPlayerName(final SharedPreferences sharedPreferences, final Context context) {
+    public static String getRightPlayerName(final SharedPreferences sharedPreferences, final Context context) {
         return sharedPreferences.getString(RIGHT_PLAYER_NAME_PREFERENCE_KEY, context.getString(R.string.defaultRightPlayerName));
     }
 
-    public static boolean isVibrationPreferred(final SharedPreferences sharedPreferences) {
+    public static boolean isVibrationOn(final SharedPreferences sharedPreferences) {
         return sharedPreferences.getBoolean(VIBRATION_PREFERENCE_KEY, true);
     }
 
-    public static boolean isBuzzerPreferred(final SharedPreferences sharedPreferences) {
+    public static boolean isBuzzerOn(final SharedPreferences sharedPreferences) {
         return sharedPreferences.getBoolean(BUZZER_PREFERENCE_KEY, true);
     }
 
-    public static int getPreferredLeftPlayerColor(final SharedPreferences sharedPreferences, final Context context) {
+    public static int getLeftPlayerColor(final SharedPreferences sharedPreferences, final Context context) {
         return sharedPreferences.getInt(LEFT_PLAYER_COLOR_PREFERENCE_KEY, context.getResources().getColor(android.R.color.holo_blue_dark));
     }
 
-    public static int getPreferredRightPlayerColor(final SharedPreferences sharedPreferences, final Context context) {
+    public static int getRightPlayerColor(final SharedPreferences sharedPreferences, final Context context) {
         return sharedPreferences.getInt(RIGHT_PLAYER_COLOR_PREFERENCE_KEY, context.getResources().getColor(android.R.color.holo_red_dark));
     }
 
     public static int getAdCounter(final SharedPreferences sharedPreferences) {
         return sharedPreferences.getInt(AD_COUNTER_PREFERENCE_KEY, 0);
+    }
+
+    public static boolean isBasicViewMode(final SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(BASIC_VIEW_MODE_PREFERENCE_KEY, true);
     }
 }
