@@ -12,7 +12,7 @@
     <dimen name="timer_tap_button_height">60dp</dimen>
     <dimen name="tap_button_bottom_padding">50dp</dimen>
 
-    <dimen name="top_display_group_top_padding">20dp</dimen>
+    <dimen name="menu_button_height">25dp</dimen>
     <!-- This should be half of "timer_tap_button_height" plus half of "tap_button_bottom_padding"-->
     <dimen name="top_display_group_bottom_padding">40dp</dimen>
 

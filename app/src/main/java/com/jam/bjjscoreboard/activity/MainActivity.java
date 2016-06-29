@@ -11,16 +11,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -184,7 +186,6 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     private ViewGroup kneeOnBelly_group_right;
 
     private ViewGroup rightPlayerDisplay;
-    ;
     private ViewGroup rightPlayerControls_basic;
     private ViewGroup rightPlayerControls_advanced;
 
@@ -195,6 +196,21 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     private Button combate;
     private Button timer;
     private View menu_button;
+    private View closeMenu_button;
+
+    private ViewGroup layout_menu_options;
+
+    private RadioButton basicViewMode_rb;
+    private RadioButton advanceViewMode_rb;
+
+    private CheckBox vibrate_cb;
+    private CheckBox buzzer_cb;
+
+    private NumberPicker minutes_numberPicker;
+    private NumberPicker seconds_numberPicker;
+
+    private EditText playerLeft_et;
+    private EditText playerRight_et;
 
     // -------------------
     // Other stuff
@@ -213,6 +229,12 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     // color
     private PlayerColorAdapter playerColorAdapter;
+
+    // State
+    private boolean menuDisplaying;
+
+    // Animation duration
+    public final static int SLIDE_ANIMATION_DURATION = 500;
 
     // -------------------
     // Ads
@@ -399,7 +421,24 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         timer.setOnClickListener(this);
         menu_button = findViewById(R.id.menu_button);
         menu_button.setOnClickListener(this);
+        closeMenu_button = findViewById(R.id.closeMenu_button);
+        closeMenu_button.setOnClickListener(this);
 
+        //Menu
+
+        layout_menu_options = (ViewGroup) findViewById(R.id.layout_menu_options_rootLayout);
+
+        basicViewMode_rb = (RadioButton) layout_menu_options.findViewById(R.id.basicViewMode_rb);
+        advanceViewMode_rb = (RadioButton) layout_menu_options.findViewById(R.id.advanceViewMode_rb);
+
+        vibrate_cb = (CheckBox) layout_menu_options.findViewById(R.id.vibrate_cb);
+        buzzer_cb = (CheckBox) layout_menu_options.findViewById(R.id.buzzer_cb);
+
+        minutes_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.minutes_numberPicker);
+        seconds_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.seconds_numberPicker);
+
+        playerLeft_et = (EditText) layout_menu_options.findViewById(R.id.playerLeft_et);
+        playerRight_et = (EditText) layout_menu_options.findViewById(R.id.playerRight_et);
 
         // Score board
 
@@ -684,173 +723,179 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     @Override
     public void onClick(View v) {
 
-        //Center buttons
-        if (v.getId() == R.id.timer) {
-            if (!scoreboard.hasCountDownStarted())
-                scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
-            else if (scoreboard.isTimerPaused())
-                scoreboard.resumeTimer();
-            else
-                scoreboard.pauseTimer();
-        } else if (v.getId() == R.id.combate) {
-            if (!scoreboard.hasCountDownStarted())
-                scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
-            else
-                openEndingOptions();
-        } else if (v.getId() == R.id.menu_button) {
-            openMenu();
-        } else if (v.getId() == R.id.leftPlayerName) {
-            openPlayerNameEditor(true);
-        } else if (v.getId() == R.id.rightPlayerName) {
-            openPlayerNameEditor(false);
-        } else if (!scoreboard.isTimerPaused()) {
-            //Move actions
-            switch (v.getId()) {
-                case R.id.generic4_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_4, false);
-                    break;
-                case R.id.generic4_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_4, true);
-                    break;
-                case R.id.generic3_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, false);
-                    break;
-                case R.id.generic3_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, true);
-                    break;
-                case R.id.generic2_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, false);
-                    break;
-                case R.id.generic2_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, true);
-                    break;
-                case R.id.rearMount_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.REAR_MOUNT, false);
-                    break;
-                case R.id.rearMount_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.REAR_MOUNT, true);
-                    break;
-                case R.id.mount_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.MOUNT, false);
-                    break;
-                case R.id.mount_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.MOUNT, true);
-                    break;
-                case R.id.back_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.BACK, false);
-                    break;
-                case R.id.back_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.BACK, true);
-                    break;
-                case R.id.guardPass_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GUARD_PASS, false);
-                    break;
-                case R.id.guardPass_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GUARD_PASS, true);
-                    break;
-                case R.id.takeDown_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.TAKE_DOWN, false);
-                    break;
-                case R.id.takeDown_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.TAKE_DOWN, true);
-                    break;
-                case R.id.sweep_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.SWEEP, false);
-                    break;
-                case R.id.sweep_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.SWEEP, true);
-                    break;
-                case R.id.kneeOnBelly_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.KNEE_ON_BELLY, false);
-                    break;
-                case R.id.kneeOnBelly_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.KNEE_ON_BELLY, true);
-                    break;
-                case R.id.adv_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.ADVANTAGE, false);
-                    break;
-                case R.id.adv_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.ADVANTAGE, true);
-                    break;
-                case R.id.pen_add_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.PENALTY, false);
-                    break;
-                case R.id.pen_subtract_left:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.PENALTY, true);
-                    break;
+        if (menuDisplaying) {
+            if (v.getId() == R.id.closeMenu_button) {
 
-                case R.id.generic4_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, false);
-                    break;
-                case R.id.generic4_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, true);
-                    break;
-                case R.id.generic3_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_3, false);
-                    break;
-                case R.id.generic3_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_3, true);
-                    break;
-                case R.id.generic2_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_2, false);
-                    break;
-                case R.id.generic2_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_2, true);
-                    break;
-                case R.id.rearMount_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.REAR_MOUNT, false);
-                    break;
-                case R.id.rearMount_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.REAR_MOUNT, true);
-                    break;
-                case R.id.mount_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.MOUNT, false);
-                    break;
-                case R.id.mount_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.MOUNT, true);
-                    break;
-                case R.id.back_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.BACK, false);
-                    break;
-                case R.id.back_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.BACK, true);
-                    break;
-                case R.id.guardPass_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GUARD_PASS, false);
-                    break;
-                case R.id.guardPass_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GUARD_PASS, true);
-                    break;
-                case R.id.takeDown_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.TAKE_DOWN, false);
-                    break;
-                case R.id.takeDown_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.TAKE_DOWN, true);
-                    break;
-                case R.id.sweep_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.SWEEP, false);
-                    break;
-                case R.id.sweep_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.SWEEP, true);
-                    break;
-                case R.id.kneeOnBelly_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.KNEE_ON_BELLY, false);
-                    break;
-                case R.id.kneeOnBelly_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.KNEE_ON_BELLY, true);
-                    break;
-                case R.id.adv_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.ADVANTAGE, false);
-                    break;
-                case R.id.adv_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.ADVANTAGE, true);
-                    break;
-                case R.id.pen_add_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.PENALTY, false);
-                    break;
-                case R.id.pen_subtract_right:
-                    scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.PENALTY, true);
-                    break;
+                closeMenu();
+            }
+        } else {
+            if (v.getId() == R.id.menu_button) {
+                openMenu();
+            } else if (v.getId() == R.id.timer) {
+                if (!scoreboard.hasCountDownStarted())
+                    scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
+                else if (scoreboard.isTimerPaused())
+                    scoreboard.resumeTimer();
+                else
+                    scoreboard.pauseTimer();
+            } else if (v.getId() == R.id.combate) {
+                if (!scoreboard.hasCountDownStarted())
+                    scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
+                else
+                    openEndingOptions();
+            } else if (v.getId() == R.id.leftPlayerName) {
+                openPlayerNameEditor(true);
+            } else if (v.getId() == R.id.rightPlayerName) {
+                openPlayerNameEditor(false);
+            } else if (!scoreboard.isTimerPaused()) {
+                //Move actions
+                switch (v.getId()) {
+                    case R.id.generic4_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_4, false);
+                        break;
+                    case R.id.generic4_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_4, true);
+                        break;
+                    case R.id.generic3_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, false);
+                        break;
+                    case R.id.generic3_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_3, true);
+                        break;
+                    case R.id.generic2_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, false);
+                        break;
+                    case R.id.generic2_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GENERIC_2, true);
+                        break;
+                    case R.id.rearMount_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.REAR_MOUNT, false);
+                        break;
+                    case R.id.rearMount_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.REAR_MOUNT, true);
+                        break;
+                    case R.id.mount_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.MOUNT, false);
+                        break;
+                    case R.id.mount_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.MOUNT, true);
+                        break;
+                    case R.id.back_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.BACK, false);
+                        break;
+                    case R.id.back_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.BACK, true);
+                        break;
+                    case R.id.guardPass_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GUARD_PASS, false);
+                        break;
+                    case R.id.guardPass_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.GUARD_PASS, true);
+                        break;
+                    case R.id.takeDown_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.TAKE_DOWN, false);
+                        break;
+                    case R.id.takeDown_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.TAKE_DOWN, true);
+                        break;
+                    case R.id.sweep_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.SWEEP, false);
+                        break;
+                    case R.id.sweep_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.SWEEP, true);
+                        break;
+                    case R.id.kneeOnBelly_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.KNEE_ON_BELLY, false);
+                        break;
+                    case R.id.kneeOnBelly_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.KNEE_ON_BELLY, true);
+                        break;
+                    case R.id.adv_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.ADVANTAGE, false);
+                        break;
+                    case R.id.adv_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.ADVANTAGE, true);
+                        break;
+                    case R.id.pen_add_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.PENALTY, false);
+                        break;
+                    case R.id.pen_subtract_left:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.LEFT, Scoreboard.MoveType.PENALTY, true);
+                        break;
+
+                    case R.id.generic4_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, false);
+                        break;
+                    case R.id.generic4_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_4, true);
+                        break;
+                    case R.id.generic3_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_3, false);
+                        break;
+                    case R.id.generic3_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_3, true);
+                        break;
+                    case R.id.generic2_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_2, false);
+                        break;
+                    case R.id.generic2_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GENERIC_2, true);
+                        break;
+                    case R.id.rearMount_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.REAR_MOUNT, false);
+                        break;
+                    case R.id.rearMount_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.REAR_MOUNT, true);
+                        break;
+                    case R.id.mount_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.MOUNT, false);
+                        break;
+                    case R.id.mount_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.MOUNT, true);
+                        break;
+                    case R.id.back_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.BACK, false);
+                        break;
+                    case R.id.back_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.BACK, true);
+                        break;
+                    case R.id.guardPass_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GUARD_PASS, false);
+                        break;
+                    case R.id.guardPass_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.GUARD_PASS, true);
+                        break;
+                    case R.id.takeDown_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.TAKE_DOWN, false);
+                        break;
+                    case R.id.takeDown_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.TAKE_DOWN, true);
+                        break;
+                    case R.id.sweep_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.SWEEP, false);
+                        break;
+                    case R.id.sweep_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.SWEEP, true);
+                        break;
+                    case R.id.kneeOnBelly_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.KNEE_ON_BELLY, false);
+                        break;
+                    case R.id.kneeOnBelly_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.KNEE_ON_BELLY, true);
+                        break;
+                    case R.id.adv_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.ADVANTAGE, false);
+                        break;
+                    case R.id.adv_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.ADVANTAGE, true);
+                        break;
+                    case R.id.pen_add_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.PENALTY, false);
+                        break;
+                    case R.id.pen_subtract_right:
+                        scoreboard.moveType_action(Scoreboard.Practitioner.RIGHT, Scoreboard.MoveType.PENALTY, true);
+                        break;
+                }
             }
         }
     }
@@ -978,33 +1023,109 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     // Menu
     // --------------------
 
+    private void closeMenu() {
+
+        menuDisplaying = false;
+
+        final float toYValue = -layout_menu_options.getHeight() + menu_button.getHeight();
+
+        final Animation menu_slide_out = new TranslateAnimation(Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0, Animation.ABSOLUTE, toYValue);
+        menu_slide_out.setDuration(SLIDE_ANIMATION_DURATION);
+
+        menu_slide_out.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                menu_button.setVisibility(View.VISIBLE);
+                layout_menu_options.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+        });
+        layout_menu_options.startAnimation(menu_slide_out);
+
+        final boolean viewModeChanged = PreferenceUtil.isBasicViewMode(sharedPreferences) != basicViewMode_rb.isChecked();
+        if (viewModeChanged)
+            scoreboard.reset();
+
+        final int resultingMins = minutes_numberPicker.getValue();
+        final int resultingSeconds = seconds_numberPicker.getValue();
+
+        final long matchLength_milli = (resultingMins * 60 + resultingSeconds) * 1000;
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putLong(PreferenceUtil.MATCH_LENGTH_PREFERENCE_KEY, matchLength_milli);
+
+        final Spinner playerColorLeft_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorLeft_spinner);
+        final int resultingColor_left = (Integer) playerColorLeft_spinner.getSelectedItem();
+        editor.putInt(PreferenceUtil.LEFT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_left);
+
+        final Spinner playerColorRight_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorRight_spinner);
+        final int resultingColor_right = (Integer) playerColorRight_spinner.getSelectedItem();
+        editor.putInt(PreferenceUtil.RIGHT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_right);
+
+        editor.putBoolean(PreferenceUtil.VIBRATION_PREFERENCE_KEY, vibrate_cb.isChecked());
+
+        editor.putBoolean(PreferenceUtil.BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
+
+        editor.putString(PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().
+
+                toString()
+
+        );
+        editor.putString(PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().
+
+                toString()
+
+        );
+
+        editor.putBoolean(PreferenceUtil.BASIC_VIEW_MODE_PREFERENCE_KEY, basicViewMode_rb.isChecked());
+
+        editor.commit();
+
+        resetState();
+
+    }
 
     private void openMenu() {
         if (scoreboard.hasCountDownStarted()) {
             return;
         }
-        final View layout_menu_options = LayoutInflater.from(this).inflate(R.layout.layout_menu_options, (ScrollView) findViewById(R.id.layout_menu_options_rootLayout));
 
-        final RadioButton basicViewMode_rb = (RadioButton) layout_menu_options.findViewById(R.id.basicViewMode_rb);
-        final RadioButton advanceViewMode_rb = (RadioButton) layout_menu_options.findViewById(R.id.advanceViewMode_rb);
+        menuDisplaying = true;
+        menu_button.setVisibility(View.INVISIBLE);
+
+        layout_menu_options.setVisibility(View.VISIBLE);
+        final float fromYValue = -layout_menu_options.getHeight() + menu_button.getHeight();
+
+        final Animation menu_slide_in = new TranslateAnimation(Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0, Animation.ABSOLUTE, fromYValue, Animation.ABSOLUTE, 0);
+        menu_slide_in.setDuration(SLIDE_ANIMATION_DURATION);
+
+        layout_menu_options.startAnimation(menu_slide_in);
 
         if (PreferenceUtil.isBasicViewMode(sharedPreferences)) {
             basicViewMode_rb.setChecked(true);
         } else {
             advanceViewMode_rb.setChecked(true);
         }
-
-        final EditText playerLeft_et = (EditText) layout_menu_options.findViewById(R.id.playerLeft_et);
         playerLeft_et.setText(PreferenceUtil.getLeftPlayerName(sharedPreferences, this));
-        final EditText playerRight_et = (EditText) layout_menu_options.findViewById(R.id.playerRight_et);
         playerRight_et.setText(PreferenceUtil.getRightPlayerName(sharedPreferences, this));
 
         final int minutes = (int) TimeUtil.toMinutes(PreferenceUtil.getMatchLength(sharedPreferences));
         final int seconds = (int) TimeUtil.toSeconds(PreferenceUtil.getMatchLength(sharedPreferences));
 
-        final NumberPicker minutes_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.minutes_numberPicker);
+
         minutes_numberPicker.setValue(minutes);
-        final NumberPicker seconds_numberPicker = (NumberPicker) layout_menu_options.findViewById(R.id.seconds_numberPicker);
         seconds_numberPicker.setValue(seconds);
 
         //loop for 2 players
@@ -1023,56 +1144,10 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
         }
 
-        final CheckBox vibrate_cb = (CheckBox) layout_menu_options.findViewById(R.id.vibrate_cb);
         vibrate_cb.setChecked(PreferenceUtil.isVibrationOn(sharedPreferences));
-
-        final CheckBox buzzer_cb = (CheckBox) layout_menu_options.findViewById(R.id.buzzer_cb);
         buzzer_cb.setChecked(PreferenceUtil.isBuzzerOn(sharedPreferences));
 
-        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle(getString(R.string.menuTitle));
-        alertBuilder.setView(layout_menu_options);
-        alertBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialogInterface, final int n) {
 
-                final boolean viewModeChanged = PreferenceUtil.isBasicViewMode(sharedPreferences) != basicViewMode_rb.isChecked();
-                if (viewModeChanged)
-                    scoreboard.reset();
-
-                final int resultingMins = minutes_numberPicker.getValue();
-                final int resultingSeconds = seconds_numberPicker.getValue();
-
-                final long matchLength_milli = (resultingMins * 60 + resultingSeconds) * 1000;
-
-                final SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putLong(PreferenceUtil.MATCH_LENGTH_PREFERENCE_KEY, matchLength_milli);
-
-                final Spinner playerColorLeft_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorLeft_spinner);
-                final int resultingColor_left = (Integer) playerColorLeft_spinner.getSelectedItem();
-                editor.putInt(PreferenceUtil.LEFT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_left);
-
-                final Spinner playerColorRight_spinner = (Spinner) layout_menu_options.findViewById(R.id.playerColorRight_spinner);
-                final int resultingColor_right = (Integer) playerColorRight_spinner.getSelectedItem();
-                editor.putInt(PreferenceUtil.RIGHT_PLAYER_COLOR_PREFERENCE_KEY, resultingColor_right);
-
-                editor.putBoolean(PreferenceUtil.VIBRATION_PREFERENCE_KEY, vibrate_cb.isChecked());
-
-                editor.putBoolean(PreferenceUtil.BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
-
-                editor.putString(PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().toString());
-                editor.putString(PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().toString());
-
-                editor.putBoolean(PreferenceUtil.BASIC_VIEW_MODE_PREFERENCE_KEY, basicViewMode_rb.isChecked());
-
-                editor.commit();
-
-                resetState();
-
-            }
-        });
-        alertBuilder.setNegativeButton(getString(android.R.string.cancel), null);
-        alertBuilder.create().show();
     }
 
     public class PlayerColorAdapter extends ArrayAdapter<Integer> {
