@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -721,6 +720,26 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     }
 
     @Override
+    public void onBackPressed() {
+        if (menuDisplaying)
+            closeMenu();
+        else if (scoreboard.hasCountDownStarted()){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getString(R.string.matchStartedWarningMsg));
+            builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                public void onClick(final DialogInterface dialogInterface, final int n) {
+                    MainActivity.this.finish();
+                }
+            });
+
+            builder.setNegativeButton(getString(android.R.string.cancel), null);
+            builder.create().show();
+        }
+        else
+            super.onBackPressed();
+    }
+
+    @Override
     public void onClick(View v) {
 
         if (menuDisplaying) {
@@ -1078,16 +1097,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
         editor.putBoolean(PreferenceUtil.BUZZER_PREFERENCE_KEY, buzzer_cb.isChecked());
 
-        editor.putString(PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().
-
-                toString()
-
-        );
-        editor.putString(PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().
-
-                toString()
-
-        );
+        editor.putString(PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY, playerLeft_et.getText().toString());
+        editor.putString(PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerRight_et.getText().toString());
 
         editor.putBoolean(PreferenceUtil.BASIC_VIEW_MODE_PREFERENCE_KEY, basicViewMode_rb.isChecked());
 

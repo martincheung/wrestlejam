@@ -13,6 +13,7 @@
 
     <string name="combate">Combate!</string>
     <string name="end">end</string>
+    <string name="matchStartedWarningMsg">Match has started. Are you sure you want to close this app?</string>
 
     <string name="defaultLeftPlayerName">Royler Gracie</string>
     <string name="defaultRightPlayerName">Eddie Bravo</string>
