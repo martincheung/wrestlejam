@@ -16,7 +16,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/generic4_group_left"
@@ -1208,7 +1209,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/generic4_group_right"
@@ -1404,7 +1406,7 @@
 
     <ImageView
         android:id="@+id/menu_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/menu_button_height"
         android:layout_centerHorizontal="true"
         android:src="@drawable/menu_button" />
