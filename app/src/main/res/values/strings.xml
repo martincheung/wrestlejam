@@ -29,7 +29,7 @@
     <string name="matchLength">Match length</string>
 
     <string name="basicViewMode">Basic</string>
-    <string name="advanceViewMode">Advance</string>
+    <string name="advancedViewMode">Advanced</string>
 
     <string name="editing">Editing %1$s</string>
 
