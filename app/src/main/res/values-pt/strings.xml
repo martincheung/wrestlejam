@@ -1,0 +1,40 @@
+<resources>
+
+    <string name="rearMount">Montada pelas costas</string>
+    <string name="mount">Montada</string>
+    <string name="back">Pegada pelas costas</string>
+    <string name="guardpass">Passagem</string>
+    <string name="takedown">Queda</string>
+    <string name="sweep">Raspagem</string>
+    <string name="kneeOnBelly">Joelho na barriga</string>
+
+    <string name="adv">Vantagens</string>
+    <string name="pen">Punições</string>
+
+    <string name="combate">Combate!</string>
+    <string name="end">Parou</string>
+    <string name="matchStartedWarningMsg">Jogo começou. Tem certeza de que deseja fechar esta app ?</string>
+
+    <string name="defaultLeftPlayerName">Royler Gracie</string>
+    <string name="defaultRightPlayerName">Eddie Bravo</string>
+
+    <string name="viewMode">Modo</string>
+    <string name="players">Lutadores</string>
+    <string name="feedBack">Opções</string>
+    <string name="vibrateOnScoreChange">Vibrar quando a pontuação muda</string>
+    <string name="buzzer">Som quando o jogo termina</string>
+    <string name="matchLength">Duração do jogo</string>
+
+    <string name="basicViewMode">Básico</string>
+    <string name="advanceViewMode">Avançado</string>
+
+    <string name="editing">Editing %1$s</string>
+
+    <string name="winByPoints">%1$s defeats %2$s by points</string>
+    <string name="winByTap">%1$s submits %2$s</string>
+    <string name="winByDQ">%1$s defeats %2$s via disqualification</string>
+    <string name="tieMsg">Match has ended in a draw</string>
+
+    <string name="falseStart">False start</string>
+    <string name="matchEnd">Match end</string>
+</resources>

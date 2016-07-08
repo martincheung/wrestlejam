@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -530,7 +531,17 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType, final long finalTimeInMilli) {
+       if(winType == Scoreboard.WinType.POINTS) {
+           MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.buzzer);
+           mediaPlayer.start();
 
+           mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+               @Override
+               public void onCompletion(MediaPlayer mp) {
+                   mp.release();
+               }
+           });
+       }
         int currentAdCounter = PreferenceUtil.getAdCounter(sharedPreferences);
         currentAdCounter++;
         if (currentAdCounter >= PreferenceUtil.AD_COUNTER_MAX) {
@@ -590,10 +601,8 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownStart() {
-
         combate.setText(getString(R.string.end));
         menu_button.setAlpha(0.5f);
-
     }
 
     @Override
