@@ -566,6 +566,12 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
         intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_RIGHT, (ArrayList<TimeLineItem>) timeLineList_right);
         intent.putExtra(ResultsActivity.INTENT_WINNER, winner);
         intent.putExtra(ResultsActivity.INTENT_WIN_TYPE, winType);
+        intent.putExtra(ResultsActivity.INTENT_OVERALL_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.OVERALL));
+        intent.putExtra(ResultsActivity.INTENT_OVERALL_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.OVERALL));
+        intent.putExtra(ResultsActivity.INTENT_ADV_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.ADVANTAGE));
+        intent.putExtra(ResultsActivity.INTENT_ADV_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.ADVANTAGE));
+        intent.putExtra(ResultsActivity.INTENT_PEN_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.PENALTY));
+        intent.putExtra(ResultsActivity.INTENT_PEN_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.PENALTY));
         startActivity(intent);
 
 

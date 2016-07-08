@@ -36,4 +36,7 @@
 
     <dimen name="list_item_horizontal_margin">8dp</dimen>
     <dimen name="list_item_vertical_margin">8dp</dimen>
+
+    <dimen name="result_status_text_size">30sp</dimen>
+    <dimen name="result_status_bottom_padding">10dp</dimen>
 </resources>
