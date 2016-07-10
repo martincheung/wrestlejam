@@ -355,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/guardpass"
+                    android:text="@string/guardPass"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/advance_move_text_size" />
 
@@ -405,7 +405,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/takedown"
+                    android:text="@string/takeDown"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/advance_move_text_size" />
 
@@ -1029,7 +1029,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/guardpass"
+                    android:text="@string/guardPass"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/advance_move_text_size" />
 
@@ -1080,7 +1080,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/takedown"
+                    android:text="@string/takeDown"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textIsSelectable="false"
                     android:textSize="@dimen/advance_move_text_size" />

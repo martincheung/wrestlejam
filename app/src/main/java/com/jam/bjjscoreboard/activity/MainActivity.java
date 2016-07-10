@@ -531,7 +531,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType, final long finalTimeInMilli) {
-       if(winType == Scoreboard.WinType.POINTS) {
+       if(winType == Scoreboard.WinType.POINTS && PreferenceUtil.isBuzzerOn(sharedPreferences)) {
            MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.buzzer);
            mediaPlayer.start();
 
