@@ -15,12 +15,14 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -531,17 +533,19 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownFinish(final Scoreboard.Practitioner winner, final Scoreboard.WinType winType, final long finalTimeInMilli) {
-       if(winType == Scoreboard.WinType.POINTS && PreferenceUtil.isBuzzerOn(sharedPreferences)) {
-           MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.buzzer);
-           mediaPlayer.start();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-           mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-               @Override
-               public void onCompletion(MediaPlayer mp) {
-                   mp.release();
-               }
-           });
-       }
+        if (winType == Scoreboard.WinType.POINTS && PreferenceUtil.isBuzzerOn(sharedPreferences)) {
+            MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.buzzer);
+            mediaPlayer.start();
+
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                }
+            });
+        }
         int currentAdCounter = PreferenceUtil.getAdCounter(sharedPreferences);
         currentAdCounter++;
         if (currentAdCounter >= PreferenceUtil.AD_COUNTER_MAX) {
@@ -560,32 +564,28 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
             }
         }
         resetState();
-        final List<TimeLineItem> timeLineList_left = scoreboard.getTimeline(Scoreboard.Practitioner.LEFT, winType, finalTimeInMilli);
-        final List<TimeLineItem> timeLineList_right = scoreboard.getTimeline(Scoreboard.Practitioner.RIGHT, winType, finalTimeInMilli);
-        gotoResults(winner, winType, timeLineList_left, timeLineList_right);
 
-    }
+        //when both are null, then we have called for a match reset
+        if (winner != null || winType != null) {
 
-    private void gotoResults(Scoreboard.Practitioner winner, Scoreboard.WinType winType, final List<TimeLineItem> timeLineList_left, final List<TimeLineItem> timeLineList_right) {
+            final List<TimeLineItem> timeLineList_left = scoreboard.getTimeline(Scoreboard.Practitioner.LEFT, winType, finalTimeInMilli);
+            final List<TimeLineItem> timeLineList_right = scoreboard.getTimeline(Scoreboard.Practitioner.RIGHT, winType, finalTimeInMilli);
 
-        if (winner == null && winType == null) {
-            return;
+            final Intent intent = new Intent(this, ResultsActivity.class);
+
+            intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_LEFT, (ArrayList<TimeLineItem>) timeLineList_left);
+            intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_RIGHT, (ArrayList<TimeLineItem>) timeLineList_right);
+            intent.putExtra(ResultsActivity.INTENT_WINNER, winner);
+            intent.putExtra(ResultsActivity.INTENT_WIN_TYPE, winType);
+            intent.putExtra(ResultsActivity.INTENT_OVERALL_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.OVERALL));
+            intent.putExtra(ResultsActivity.INTENT_OVERALL_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.OVERALL));
+            intent.putExtra(ResultsActivity.INTENT_ADV_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.ADVANTAGE));
+            intent.putExtra(ResultsActivity.INTENT_ADV_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.ADVANTAGE));
+            intent.putExtra(ResultsActivity.INTENT_PEN_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.PENALTY));
+            intent.putExtra(ResultsActivity.INTENT_PEN_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.PENALTY));
+            startActivity(intent);
+
         }
-        final Intent intent = new Intent(this, ResultsActivity.class);
-
-        intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_LEFT, (ArrayList<TimeLineItem>) timeLineList_left);
-        intent.putParcelableArrayListExtra(ResultsActivity.INTENT_TIMELINE_RIGHT, (ArrayList<TimeLineItem>) timeLineList_right);
-        intent.putExtra(ResultsActivity.INTENT_WINNER, winner);
-        intent.putExtra(ResultsActivity.INTENT_WIN_TYPE, winType);
-        intent.putExtra(ResultsActivity.INTENT_OVERALL_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.OVERALL));
-        intent.putExtra(ResultsActivity.INTENT_OVERALL_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.OVERALL));
-        intent.putExtra(ResultsActivity.INTENT_ADV_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.ADVANTAGE));
-        intent.putExtra(ResultsActivity.INTENT_ADV_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.ADVANTAGE));
-        intent.putExtra(ResultsActivity.INTENT_PEN_SCORE_LEFT, scoreboard.getScore(Scoreboard.Practitioner.LEFT, Scoreboard.ScoreType.PENALTY));
-        intent.putExtra(ResultsActivity.INTENT_PEN_SCORE_RIGHT, scoreboard.getScore(Scoreboard.Practitioner.RIGHT, Scoreboard.ScoreType.PENALTY));
-        startActivity(intent);
-
-
     }
 
     @Override
@@ -601,6 +601,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
     @Override
     public void onCountDownStart() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         combate.setText(getString(R.string.end));
         menu_button.setAlpha(0.5f);
     }
@@ -738,7 +739,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
     public void onBackPressed() {
         if (menuDisplaying)
             closeMenu();
-        else if (scoreboard.hasCountDownStarted()){
+        else if (scoreboard.hasCountDownStarted()) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(getString(R.string.matchStartedWarningMsg));
             builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
@@ -749,8 +750,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
             builder.setNegativeButton(getString(android.R.string.cancel), null);
             builder.create().show();
-        }
-        else
+        } else
             super.onBackPressed();
     }
 
@@ -767,7 +767,7 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
                 openMenu();
             } else if (v.getId() == R.id.timer) {
                 if (!scoreboard.hasCountDownStarted())
-                    scoreboard.startTimer(PreferenceUtil.getMatchLength(sharedPreferences));
+                    openMatchLengthEditor();
                 else if (scoreboard.isTimerPaused())
                     scoreboard.resumeTimer();
                 else
@@ -1042,6 +1042,52 @@ public class MainActivity extends Activity implements OnScoreboardChangeListener
 
 
                 editor.putString(isLeft ? PreferenceUtil.LEFT_PLAYER_NAME_PREFERENCE_KEY : PreferenceUtil.RIGHT_PLAYER_NAME_PREFERENCE_KEY, playerName_et.getText().toString());
+
+                editor.commit();
+
+                resetState();
+
+            }
+        });
+        alertBuilder.setNegativeButton(getString(android.R.string.cancel), null);
+        alertBuilder.create().show();
+    }
+
+    // --------------------
+    // Match Length Editor
+    // --------------------
+
+    private void openMatchLengthEditor() {
+        if (scoreboard.hasCountDownStarted()) {
+            return;
+        }
+
+        final View matchLengthEditor_rootLayout = LayoutInflater.from(this).inflate(R.layout.layout_match_length_editor, (LinearLayout) findViewById(R.id.matchLengthEditor_rootLayout));
+
+        final int minutes = (int) TimeUtil.toMinutes(PreferenceUtil.getMatchLength(sharedPreferences));
+        final int seconds = (int) TimeUtil.toSeconds(PreferenceUtil.getMatchLength(sharedPreferences));
+
+        final NumberPicker minutes_numberPicker = (NumberPicker) matchLengthEditor_rootLayout.findViewById(R.id.minutes_numberPicker);
+        final NumberPicker seconds_numberPicker = (NumberPicker) matchLengthEditor_rootLayout.findViewById(R.id.seconds_numberPicker);
+
+        minutes_numberPicker.setValue(minutes);
+        seconds_numberPicker.setValue(seconds);
+
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(getString(R.string.matchLength));
+        alertBuilder.setView(matchLengthEditor_rootLayout);
+        alertBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialogInterface, final int n) {
+
+
+                final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                final int resultingMins = minutes_numberPicker.getValue();
+                final int resultingSeconds = seconds_numberPicker.getValue();
+
+                final long matchLength_milli = (resultingMins * 60 + resultingSeconds) * 1000;
+
+                editor.putLong(PreferenceUtil.MATCH_LENGTH_PREFERENCE_KEY, matchLength_milli);
 
                 editor.commit();
 

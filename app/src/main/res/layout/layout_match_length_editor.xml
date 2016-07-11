@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/matchLengthEditor_rootLayout"
+    android:orientation="horizontal">
+
+    <com.jam.bjjscoreboard.widget.NumberPicker
+        android:id="@+id/minutes_numberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:np_dividerColor="@color/colorAccent"
+        app:np_formatter="@string/number_picker_formatter"
+        app:np_max="59"
+        app:np_min="0"
+        app:np_textColor="@color/colorAccent"
+        app:np_textSize="@dimen/number_picker_text_size"
+        app:np_typeface="@string/roboto_light" />
+
+    <com.jam.bjjscoreboard.widget.NumberPicker
+        android:id="@+id/seconds_numberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:np_dividerColor="@color/colorAccent"
+        app:np_formatter="@string/number_picker_formatter"
+        app:np_max="59"
+        app:np_min="0"
+        app:np_textColor="@color/colorAccent"
+        app:np_textSize="@dimen/number_picker_text_size"
+        app:np_typeface="@string/roboto_light" />
+</LinearLayout>

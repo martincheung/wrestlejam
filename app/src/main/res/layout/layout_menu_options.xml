@@ -10,8 +10,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/menuBackgroundColor"
-        android:layout_weight="1">
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/scrollbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,7 +124,7 @@
                     app:np_max="59"
                     app:np_min="0"
                     app:np_textColor="@color/colorAccent"
-                    app:np_textSize="30dp"
+                    app:np_textSize="@dimen/number_picker_text_size"
                     app:np_typeface="@string/roboto_light" />
 
                 <com.jam.bjjscoreboard.widget.NumberPicker
@@ -135,11 +137,9 @@
                     app:np_max="59"
                     app:np_min="0"
                     app:np_textColor="@color/colorAccent"
-                    app:np_textSize="30dp"
+                    app:np_textSize="@dimen/number_picker_text_size"
                     app:np_typeface="@string/roboto_light" />
-
             </LinearLayout>
-
 
             <TextView
                 android:layout_width="wrap_content"

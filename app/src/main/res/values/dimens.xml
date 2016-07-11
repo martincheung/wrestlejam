@@ -44,4 +44,5 @@
     <dimen name="result_screen_vertical_margin">8dp</dimen>
 
     <dimen name="result_timeline_text_size">10sp</dimen>
+    <dimen name="number_picker_text_size">30sp</dimen>
 </resources>

@@ -1,10 +1,8 @@
 package com.jam.bjjscoreboard.activity;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +54,9 @@ public class ResultsActivity extends AppCompatActivity {
         put(Scoreboard.MoveType.TAKE_DOWN, R.string.takeDown);
         put(Scoreboard.MoveType.ADVANTAGE, R.string.advantage);
         put(Scoreboard.MoveType.PENALTY, R.string.penalty);
+        put(Scoreboard.WinType.DQ, R.string.matchEnd);
+        put(Scoreboard.WinType.POINTS, R.string.matchEnd);
+        put(Scoreboard.WinType.TAP_OUT, R.string.matchEnd);
     }};
 
     @Override
@@ -168,10 +169,9 @@ public class ResultsActivity extends AppCompatActivity {
                         final int height = scrollContainer.getHeight();
                         final float y = scrollContainer.getY();
 
-                        if (y+height < screenHeight){
-//                            leftTimeLineContainer.setLayoutParams(new LinearLayout.LayoutParams(0, screenHeight-y));
-                            leftTimeLineContainer.getLayoutParams().height = (int) (screenHeight-y);
-                            rightTimeLineContainer.getLayoutParams().height = (int) (screenHeight-y);
+                        if (y + height < screenHeight) {
+                            leftTimeLineContainer.getLayoutParams().height = (int) (screenHeight - y);
+                            rightTimeLineContainer.getLayoutParams().height = (int) (screenHeight - y);
                         }
                     }
                 });
@@ -181,11 +181,10 @@ public class ResultsActivity extends AppCompatActivity {
         for (final TimeLineItem timeLineItem : timeLineItemList) {
 
 
-
             final long timeInMilli = timeLineItem.getTimeInMilli();
             final Scoreboard.TimeLineType timeLineType = timeLineItem.getTimeLineType();
 
-            if (timeLineType==null || timeLineType instanceof Scoreboard.WinType)
+            if (timeLineType == null)
                 continue;
 
             final TextView timeInMilli_tv = new TextView(this);
@@ -200,10 +199,10 @@ public class ResultsActivity extends AppCompatActivity {
             move_tv.setGravity(Gravity.CENTER_HORIZONTAL);
             move_tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, getResources().getDimension(R.dimen.result_timeline_text_size));
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            timeColumn.addView(timeInMilli_tv,layoutParams);
-            moveColumn.addView(move_tv,layoutParams);
+            timeColumn.addView(timeInMilli_tv, layoutParams);
+            moveColumn.addView(move_tv, layoutParams);
         }
     }
 
