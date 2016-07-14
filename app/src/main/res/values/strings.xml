@@ -20,14 +20,13 @@
     <string name="scored2">Scored 2</string>
 
     <string name="combate">Combate!</string>
-    <string name="end">end</string>
+    <string name="end">End</string>
     <string name="matchStartedWarningMsg">Match has started. Are you sure you want to close this app?</string>
 
     <string name="defaultLeftPlayerName">Royler Gracie</string>
     <string name="defaultRightPlayerName">Eddie Bravo</string>
 
     <string name="menuTitle">Menu</string>
-
 
     <string name="viewMode">View mode</string>
     <string name="players">Players</string>
