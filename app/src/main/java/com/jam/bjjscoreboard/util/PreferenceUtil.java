@@ -18,7 +18,7 @@ public class PreferenceUtil {
     public final static String LEFT_PLAYER_COLOR_PREFERENCE_KEY = "leftPlayerColorPreference";
     public final static String RIGHT_PLAYER_COLOR_PREFERENCE_KEY = "rightPlayerColorPreference";
     public final static String AD_COUNTER_PREFERENCE_KEY = "adCounterPreference";
-    public final static int AD_COUNTER_MAX = 10;
+    public final static int AD_COUNTER_MAX = 3;
     public final static String BASIC_VIEW_MODE_PREFERENCE_KEY = "viewModePreference";
 
     public static long getMatchLength(final SharedPreferences sharedPreferences) {

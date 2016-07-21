@@ -3,7 +3,7 @@
     <string name="rearMount">Montada pelas costas</string>
     <string name="mount">Montada</string>
     <string name="back">Pegada pelas costas</string>
-    <string name="guardPass">Passagem</string>
+    <string name="guardPass">Passagem de guarda</string>
     <string name="takeDown">Queda</string>
     <string name="sweep">Raspagem</string>
     <string name="kneeOnBelly">Joelho na barriga</string>
@@ -14,13 +14,13 @@
     <string name="advantage">Vantagens</string>
     <string name="penalty">Punições</string>
 
-    <string name="scored4">Scored 4</string>
-    <string name="scored3">Scored 3</string>
-    <string name="scored2">Scored 2</string>
+    <string name="scored4">4 Pontos</string>
+    <string name="scored3">3 Pontos</string>
+    <string name="scored2">2 Pontos</string>
 
     <string name="combate">Combate!</string>
     <string name="end">Parou</string>
-    <string name="matchStartedWarningMsg">Jogo começou. Tem certeza de que deseja fechar esta app ?</string>
+    <string name="matchStartedWarningMsg">Jogo começou. Tem certeza de que deseja fechar esta app?</string>
 
     <string name="menuTitle">Menu</string>
 
@@ -34,16 +34,16 @@
     <string name="basicViewMode">Básico</string>
     <string name="advancedViewMode">Avançado</string>
 
-    <string name="editing">Editing %1$s</string>
+    <string name="editing">Editando %1$s</string>
 
-    <string name="winByTap">%1$s submits %2$s</string>
-    <string name="winByDQ">%1$s defeats %2$s via disqualification</string>
-    <string name="tieMsg">Draw</string>
+    <string name="winByTap">%1$s finalização %2$s</string>
+    <string name="winByDQ">%1$s derrota %2$s por desqualificação</string>
+    <string name="tieMsg">Empatar</string>
 
-    <string name="winnerByPointsMsg">Winner by points</string>
-    <string name="winnerBySubmissionMsg">Winner by submission</string>
-    <string name="winnerByDQMsg">Winner by DQ</string>
+    <string name="winnerByPointsMsg">Vencedor por pontos</string>
+    <string name="winnerBySubmissionMsg">Vencedor por finalização</string>
+    <string name="winnerByDQMsg">Vencedor por desqualificação</string>
 
-    <string name="falseStart">False start</string>
-    <string name="matchEnd">Match end</string>
+    <string name="falseStart">Reiniciar</string>
+    <string name="matchEnd">Final do jogo</string>
 </resources>

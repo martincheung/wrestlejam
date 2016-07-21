@@ -48,6 +48,6 @@
     <string name="winnerBySubmissionMsg">Winner by submission</string>
     <string name="winnerByDQMsg">Winner by DQ</string>
 
-    <string name="falseStart">False start</string>
+    <string name="falseStart">Reset</string>
     <string name="matchEnd">Match end</string>
 </resources>
