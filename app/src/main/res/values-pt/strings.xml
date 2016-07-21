@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">BJJ Placar</string>
 
     <string name="rearMount">Montada pelas costas</string>
     <string name="mount">Montada</string>
@@ -21,6 +22,9 @@
     <string name="combate">Combate!</string>
     <string name="end">Parou</string>
     <string name="matchStartedWarningMsg">Jogo começou. Tem certeza de que deseja fechar esta app?</string>
+
+    <string name="defaultLeftPlayerName">Royler Gracie</string>
+    <string name="defaultRightPlayerName">Eddie Bravo</string>
 
     <string name="menuTitle">Menu</string>
 
