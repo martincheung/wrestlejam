@@ -127,15 +127,15 @@ public class ResultsActivity extends AppCompatActivity {
                 }
             }
         }
-        final Typeface captureIt = Typeface.createFromAsset(getAssets(), "fonts/Capture_it.ttf");
+        final Typeface major_shift = Typeface.createFromAsset(getAssets(), "fonts/major_shift.ttf");
 
         final TextView leftResultStatus = (TextView) findViewById(R.id.leftResultStatus);
         leftResultStatus.setText(leftResultMessage);
-        leftResultStatus.setTypeface(captureIt);
+        leftResultStatus.setTypeface(major_shift);
 
         final TextView rightResultStatus = (TextView) findViewById(R.id.rightResultStatus);
         rightResultStatus.setText(rightResultMessage);
-        rightResultStatus.setTypeface(captureIt);
+        rightResultStatus.setTypeface(major_shift);
 
         final ViewGroup leftPlayerDisplay = (ViewGroup) findViewById(R.id.leftPlayerDisplay);
         leftPlayerDisplay.setBackgroundColor(PreferenceUtil.getLeftPlayerColor(sharedPreferences, this));
