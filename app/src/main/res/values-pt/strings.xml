@@ -42,7 +42,7 @@
 
     <string name="winnerByPointsMsg">Vencedor por pontos</string>
     <string name="winnerBySubmissionMsg">Vencedor por finalização</string>
-    <string name="winnerByDQMsg">Vencedor por desqualificação</string>
+    <string name="winnerByDQMsg">Vencedor por DQ</string>
 
     <string name="falseStart">Reiniciar</string>
     <string name="matchEnd">Final do jogo</string>

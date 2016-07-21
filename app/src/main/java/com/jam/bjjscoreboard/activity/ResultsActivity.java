@@ -191,13 +191,11 @@ public class ResultsActivity extends AppCompatActivity {
             timeInMilli_tv.setText(TimeUtil.milliToTimeFormat(timeInMilli));
             timeInMilli_tv.setTextColor(Color.WHITE);
             timeInMilli_tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            timeInMilli_tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, getResources().getDimension(R.dimen.result_timeline_text_size));
 
             final TextView move_tv = new TextView(this);
             move_tv.setText(getString(TIME_LINE_TYPE_TO_STRING_ID_MAP.get(timeLineType)));
             move_tv.setTextColor(Color.WHITE);
             move_tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            move_tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, getResources().getDimension(R.dimen.result_timeline_text_size));
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
